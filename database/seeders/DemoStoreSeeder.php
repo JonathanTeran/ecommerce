@@ -74,15 +74,17 @@ class DemoStoreSeeder extends Seeder
         }
         $customers->push($customer);
 
-        // Get categories
+        // Get categories (names are stored as JSON translations, must use model accessor)
         $catMap = Category::withoutGlobalScopes()
             ->where('tenant_id', $tenant->id)
-            ->pluck('id', 'name');
+            ->get()
+            ->mapWithKeys(fn ($c) => [$c->name => $c->id]);
 
-        // Get brands
+        // Get brands (names may also be translatable)
         $brandMap = Brand::withoutGlobalScopes()
             ->where('tenant_id', $tenant->id)
-            ->pluck('id', 'name');
+            ->get()
+            ->mapWithKeys(fn ($b) => [$b->name => $b->id]);
 
         // Ensure brands exist
         $brandsToCreate = ['ASUS', 'ACER', 'HP', 'DELL', 'LENOVO', 'APPLE', 'SAMSUNG', 'KINGSTON', 'LOGITECH', 'TP-LINK', 'EPSON', 'CANON', 'CORSAIR', 'INTEL', 'AMD', 'WESTERN DIGITAL', 'SEAGATE', 'HIKVISION'];
