@@ -300,6 +300,102 @@ class ManageHomepage extends Page
                             ->collapsed()
                             ->visible(fn (Get $get) => $get('type') === SectionType::ValueProps->value),
 
+                        // Testimonials config
+                        Forms\Components\Section::make('Configuración de Testimonios')
+                            ->schema([
+                                Forms\Components\Grid::make(2)->schema([
+                                    Forms\Components\TextInput::make('config.heading')
+                                        ->label('Título'),
+                                    Forms\Components\TextInput::make('config.subheading')
+                                        ->label('Subtítulo'),
+                                ]),
+                                Forms\Components\Repeater::make('config.reviews')
+                                    ->label('Testimonios')
+                                    ->schema([
+                                        Forms\Components\Grid::make(2)->schema([
+                                            Forms\Components\TextInput::make('author')
+                                                ->label('Nombre del Cliente')
+                                                ->required(),
+                                            Forms\Components\TextInput::make('role')
+                                                ->label('Rol / Etiqueta')
+                                                ->placeholder('Compra verificada'),
+                                        ]),
+                                        Forms\Components\Textarea::make('text')
+                                            ->label('Testimonio')
+                                            ->rows(2)
+                                            ->required(),
+                                        Forms\Components\Select::make('rating')
+                                            ->label('Calificación')
+                                            ->options([5 => '5 Estrellas', 4 => '4 Estrellas', 3 => '3 Estrellas', 2 => '2 Estrellas', 1 => '1 Estrella'])
+                                            ->default(5),
+                                    ])
+                                    ->defaultItems(1)
+                                    ->addActionLabel('Agregar Testimonio')
+                                    ->collapsible(),
+                            ])
+                            ->collapsed()
+                            ->visible(fn (Get $get) => $get('type') === SectionType::Testimonials->value),
+
+                        // Social Proof config
+                        Forms\Components\Section::make('Configuración de Prueba Social')
+                            ->schema([
+                                Forms\Components\TextInput::make('config.heading')
+                                    ->label('Título'),
+                                Forms\Components\Repeater::make('config.metrics')
+                                    ->label('Métricas')
+                                    ->schema([
+                                        Forms\Components\TextInput::make('value')
+                                            ->label('Valor')
+                                            ->placeholder('2,500+')
+                                            ->required(),
+                                        Forms\Components\TextInput::make('label')
+                                            ->label('Etiqueta')
+                                            ->placeholder('Clientes Satisfechos')
+                                            ->required(),
+                                        Forms\Components\Select::make('icon')
+                                            ->label('Icono')
+                                            ->options([
+                                                'users' => 'Usuarios / Personas',
+                                                'package' => 'Paquete / Envío',
+                                                'star' => 'Estrella / Rating',
+                                                'support' => 'Soporte / Ayuda',
+                                                'shield' => 'Escudo / Seguridad',
+                                                'globe' => 'Globo / Mundial',
+                                            ])
+                                            ->default('star'),
+                                    ])
+                                    ->columns(3)
+                                    ->defaultItems(4)
+                                    ->addActionLabel('Agregar Métrica'),
+                            ])
+                            ->collapsed()
+                            ->visible(fn (Get $get) => $get('type') === SectionType::SocialProof->value),
+
+                        // Newsletter Banner config
+                        Forms\Components\Section::make('Configuración de Newsletter')
+                            ->schema([
+                                Forms\Components\Grid::make(2)->schema([
+                                    Forms\Components\TextInput::make('config.heading')
+                                        ->label('Título'),
+                                    Forms\Components\TextInput::make('config.button_text')
+                                        ->label('Texto del Botón'),
+                                ]),
+                                Forms\Components\Textarea::make('config.subheading')
+                                    ->label('Subtítulo')
+                                    ->rows(2),
+                                Forms\Components\Repeater::make('config.benefit_items')
+                                    ->label('Beneficios')
+                                    ->simple(
+                                        Forms\Components\TextInput::make('benefit')
+                                            ->placeholder('Ofertas exclusivas')
+                                            ->required(),
+                                    )
+                                    ->defaultItems(3)
+                                    ->addActionLabel('Agregar Beneficio'),
+                            ])
+                            ->collapsed()
+                            ->visible(fn (Get $get) => $get('type') === SectionType::NewsletterBanner->value),
+
                         // Visual Style (shared for all section types)
                         Forms\Components\Section::make('Estilo Visual')
                             ->description('Personaliza colores, espaciado y tipografía de esta sección')
