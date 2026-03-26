@@ -13,6 +13,9 @@ enum SectionType: string
     case ProductGrid = 'product_grid';
     case BrandSlider = 'brand_slider';
     case ValueProps = 'value_props';
+    case Testimonials = 'testimonials';
+    case SocialProof = 'social_proof';
+    case NewsletterBanner = 'newsletter_banner';
 
     public function label(): string
     {
@@ -24,6 +27,9 @@ enum SectionType: string
             self::ProductGrid => 'Grilla de Productos',
             self::BrandSlider => 'Slider de Marcas',
             self::ValueProps => 'Propuesta de Valor',
+            self::Testimonials => 'Testimonios de Clientes',
+            self::SocialProof => 'Prueba Social / Estadisticas',
+            self::NewsletterBanner => 'Banner Newsletter',
         };
     }
 
@@ -102,6 +108,31 @@ enum SectionType: string
                     ['icon' => 'refresh', 'title' => 'Devoluciones Fáciles', 'description' => 'Política de devolución de 30 días para su tranquilidad.'],
                     ['icon' => 'support', 'title' => 'Soporte Técnico', 'description' => 'Asesoría personalizada para armar tu PC.'],
                 ],
+                'style' => SectionStyleHelper::defaultStyle(),
+            ],
+            self::Testimonials => [
+                'heading' => 'Lo que dicen nuestros clientes',
+                'subheading' => 'Miles de clientes satisfechos nos respaldan',
+                'reviews' => [
+                    ['author' => 'Cliente Satisfecho', 'rating' => 5, 'text' => 'Excelente servicio y productos de calidad.', 'role' => 'Cliente frecuente'],
+                ],
+                'style' => SectionStyleHelper::defaultStyle(),
+            ],
+            self::SocialProof => [
+                'heading' => 'Numeros que nos respaldan',
+                'metrics' => [
+                    ['value' => '2,500+', 'label' => 'Clientes Satisfechos', 'icon' => 'users'],
+                    ['value' => '5,000+', 'label' => 'Pedidos Entregados', 'icon' => 'package'],
+                    ['value' => '4.8/5', 'label' => 'Calificacion Promedio', 'icon' => 'star'],
+                    ['value' => '24/7', 'label' => 'Soporte Tecnico', 'icon' => 'support'],
+                ],
+                'style' => SectionStyleHelper::defaultStyle(),
+            ],
+            self::NewsletterBanner => [
+                'heading' => 'Ofertas exclusivas en tu correo',
+                'subheading' => 'Suscribete y recibe un 10% de descuento en tu primera compra',
+                'button_text' => 'Suscribirme',
+                'benefit_items' => ['Ofertas exclusivas', 'Nuevos productos', 'Descuentos especiales'],
                 'style' => SectionStyleHelper::defaultStyle(),
             ],
         };
