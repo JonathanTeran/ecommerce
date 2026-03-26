@@ -35,7 +35,8 @@
     }
 }">
     <div class="container mx-auto px-4">
-        <h2 class="text-3xl md:text-4xl font-bold font-heading text-gray-900 dark:text-white mb-10">
+        <h2 class="text-3xl md:text-4xl font-bold font-heading mb-10"
+            style="color: {{ $style['text_color'] ?? '#111827' }};">
             {{ __($config['heading'] ?? 'Tendencias') }}
         </h2>
 
