@@ -30,7 +30,7 @@ class ProductController extends Controller
         $relatedProducts = Product::where('category_id', $product->category_id)
             ->where('id', '!=', $product->id)
             ->where('is_active', true)
-            ->with('media')
+            ->with(['media', 'brand', 'category', 'reviews'])
             ->take(4)
             ->get();
 
