@@ -166,8 +166,9 @@ class DemoStoreSeeder extends Seeder
             }
 
             $product = Product::withoutGlobalScopes()->updateOrCreate(
-                ['sku' => Str::upper(Str::random(8)), 'tenant_id' => $tenant->id, 'name' => $p['name']],
+                ['tenant_id' => $tenant->id, 'name' => $p['name']],
                 [
+                    'sku' => Str::upper(Str::random(8)),
                     'category_id' => $catId,
                     'brand_id' => $brandId,
                     'price' => $p['price'],
