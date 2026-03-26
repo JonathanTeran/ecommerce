@@ -11,6 +11,7 @@
 <div class="{{ $hasCustomStyle ? '' : 'bg-white dark:bg-zinc-900 border-b border-gray-100 dark:border-zinc-800 py-8' }}"
     @if($hasCustomStyle) style="{!! $customCss !!}" @endif>
     <div class="container mx-auto px-4">
+        <h2 class="text-2xl md:text-3xl font-bold font-heading text-center mb-8" style="color: {{ $style['text_color'] ?? '#111827' }};">{{ __('Compra por Categoría') }}</h2>
         <div class="flex gap-8 justify-center flex-wrap pb-4">
             @if(count($configCategories) > 0)
                 @foreach($configCategories as $cat)
@@ -30,7 +31,7 @@
                                     </svg>
                                 @endif
                             </div>
-                            <span class="text-sm font-bold text-gray-700 dark:text-gray-300 group-hover:text-primary-600 transition">{{ $category->name }}</span>
+                            <span class="text-sm font-bold group-hover:text-primary-600 transition">{{ $category->name }}</span>
                         </a>
                     @endif
                 @endforeach
@@ -48,7 +49,7 @@
                                 </svg>
                             @endif
                         </div>
-                        <span class="text-sm font-bold text-gray-700 dark:text-gray-300 group-hover:text-primary-600 transition">{{ $category->name }}</span>
+                        <span class="text-sm font-bold group-hover:text-primary-600 transition">{{ $category->name }}</span>
                         @php $catCount = $category->all_products_count ?? $category->products_count ?? 0; @endphp
                         @if($catCount > 0)
                             <span class="text-xs text-gray-400 dark:text-gray-500 -mt-1">{{ $catCount }} {{ __('productos') }}</span>

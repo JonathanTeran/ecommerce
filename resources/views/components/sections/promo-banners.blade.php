@@ -36,15 +36,21 @@
         <div class="container mx-auto px-4">
             <div class="grid grid-cols-1 md:grid-cols-{{ min(count($banners), 2) }} gap-6">
                 @foreach($banners as $banner)
-                    <div class="relative h-64 md:h-80 rounded-3xl overflow-hidden group">
+                    @php
+                        $bannerGradients = ['bg-gradient-to-br from-slate-800 to-slate-900', 'bg-gradient-to-br from-indigo-900 to-slate-900', 'bg-gradient-to-br from-purple-900 to-slate-900'];
+                        $bannerGradient = $bannerGradients[$loop->index % count($bannerGradients)];
+                    @endphp
+                    <div class="relative h-64 md:h-80 rounded-3xl overflow-hidden group {{ !($banner['image'] ?? null) ? $bannerGradient : '' }}">
                         @if($banner['image'] ?? null)
-                        <img src="{{ asset('storage/' . $banner['image']) }}"
+                            <img src="{{ asset('storage/' . $banner['image']) }}"
+                                alt="{{ $banner['title'] ?? '' }}"
+                                class="w-full h-full object-cover transform group-hover:scale-105 transition duration-700">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
                         @else
-                        <img src="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27800%27 height=%27400%27%3E%3Crect fill=%27%23e2e8f0%27 width=%27800%27 height=%27400%27/%3E%3C/svg%3E"
+                            <div class="absolute inset-0 opacity-20">
+                                <svg class="absolute bottom-0 right-0 w-64 h-64 text-white/10" fill="currentColor" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                            </div>
                         @endif
-                            alt="{{ $banner['title'] ?? '' }}"
-                            class="w-full h-full object-cover transform group-hover:scale-105 transition duration-700">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
                         <div class="absolute bottom-6 left-6 md:bottom-10 md:left-10 text-white">
                             @if($banner['badge_text'] ?? null)
                                 <span class="{{ $badgeColors[$banner['badge_color'] ?? 'blue'] ?? 'bg-blue-600' }} text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide mb-2 inline-block">
