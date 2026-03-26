@@ -57,7 +57,7 @@
                         {{-- Subtitle/Count --}}
                         <p
                             class="text-sm text-gray-500 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors mt-auto">
-                            {{ $category->products_count ?? 0 }} {{ __('Artículos') }}
+                            {{ $category->all_products_count ?? 0 }} {{ __('Artículos') }}
                         </p>
 
                         {{-- Decorative background gradient --}}
