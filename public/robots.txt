@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /admin/*
+Disallow: /checkout
+Disallow: /account
+Disallow: /account/*
+Disallow: /my-quotations
+Disallow: /my-quotations/*
+Disallow: /api/
+Disallow: /livewire/
+
+Sitemap: /sitemap.xml

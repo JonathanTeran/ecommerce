@@ -1,0 +1,1116 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Ecommerce SaaS API",
+        "description": "API REST para la plataforma ecommerce multi-tenant SaaS. Incluye endpoints para catálogo, carrito, checkout, recomendaciones y cotizaciones.",
+        "contact": {
+            "name": "Soporte API",
+            "email": "api@ecommerce.test"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "/api",
+            "description": "API Server"
+        }
+    ],
+    "paths": {
+        "/cart": {
+            "get": {
+                "tags": [
+                    "Carrito"
+                ],
+                "summary": "Ver carrito",
+                "description": "Retorna el contenido actual del carrito. Soporta carrito por sesión (guest) o por usuario autenticado.",
+                "operationId": "a290eb330c4b625ab436b6e37cd1beda",
+                "parameters": [
+                    {
+                        "name": "X-Session-ID",
+                        "in": "header",
+                        "description": "ID de sesión para carrito de invitado",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Datos del carrito",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CartResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Carrito"
+                ],
+                "summary": "Agregar al carrito",
+                "description": "Agrega un producto al carrito con la cantidad especificada.",
+                "operationId": "b8e2209c6d9b86c119511ccd4efb0332",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CartAddRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Producto agregado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CartResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Producto no encontrado o no disponible"
+                    }
+                }
+            }
+        },
+        "/cart/{itemId}": {
+            "put": {
+                "tags": [
+                    "Carrito"
+                ],
+                "summary": "Actualizar cantidad",
+                "description": "Actualiza la cantidad de un item del carrito. Enviar 0 para eliminar.",
+                "operationId": "a73d6e1e391397bb5eb9e7933f4bd70e",
+                "parameters": [
+                    {
+                        "name": "itemId",
+                        "in": "path",
+                        "description": "ID del item en el carrito",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CartUpdateRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Carrito actualizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CartResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Carrito"
+                ],
+                "summary": "Eliminar del carrito",
+                "description": "Elimina un item específico del carrito.",
+                "operationId": "8e2a7fd0688e3a7dd80ebbdd3053bea0",
+                "parameters": [
+                    {
+                        "name": "itemId",
+                        "in": "path",
+                        "description": "ID del item a eliminar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Item eliminado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CartResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/cart/apply-coupon": {
+            "post": {
+                "tags": [
+                    "Carrito"
+                ],
+                "summary": "Aplicar cupón",
+                "description": "Aplica un código de cupón de descuento al carrito.",
+                "operationId": "550cc5f041ef2ce9968ff4cbd8bf6e4f",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CouponRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Cupón aplicado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CartResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Cupón no encontrado"
+                    },
+                    "422": {
+                        "description": "Cupón no válido o expirado"
+                    }
+                }
+            }
+        },
+        "/cart/coupon": {
+            "delete": {
+                "tags": [
+                    "Carrito"
+                ],
+                "summary": "Remover cupón",
+                "description": "Remueve el cupón de descuento aplicado al carrito.",
+                "operationId": "1b4702a2b1c3d2883967fa6c97953df6",
+                "responses": {
+                    "200": {
+                        "description": "Cupón removido",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CartResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/quotation": {
+            "post": {
+                "tags": [
+                    "Cotizaciones"
+                ],
+                "summary": "Solicitar cotización",
+                "description": "Crea una cotización a partir del carrito actual. Requiere autenticación.",
+                "operationId": "c083b1cc0479a6981b2bac0ddf1a5e25",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/QuotationRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Cotización creada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/QuotationResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Carrito vacío"
+                    },
+                    "401": {
+                        "description": "Autenticación requerida"
+                    },
+                    "403": {
+                        "description": "Cotizaciones deshabilitadas en esta tienda"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/products/{product}/recommendations/bought-together": {
+            "get": {
+                "tags": [
+                    "Recomendaciones"
+                ],
+                "summary": "Frecuentemente comprados juntos",
+                "description": "Retorna productos que los clientes frecuentemente compran junto con el producto indicado, basado en historial de órdenes.",
+                "operationId": "9f9da94cf79c3bf9d83699d30fd8b6ed",
+                "parameters": [
+                    {
+                        "name": "product",
+                        "in": "path",
+                        "description": "Slug del producto",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Productos recomendados",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ProductRecommendation"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/products/{product}/recommendations/also-viewed": {
+            "get": {
+                "tags": [
+                    "Recomendaciones"
+                ],
+                "summary": "Clientes también vieron",
+                "description": "Retorna productos que otros clientes también vieron después de ver este producto.",
+                "operationId": "b2f05dbb672db0df99963ae6a3f3665e",
+                "parameters": [
+                    {
+                        "name": "product",
+                        "in": "path",
+                        "description": "Slug del producto",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Productos recomendados",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ProductRecommendation"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/products/trending": {
+            "get": {
+                "tags": [
+                    "Recomendaciones"
+                ],
+                "summary": "Productos en tendencia",
+                "description": "Retorna los productos más vistos en los últimos 7 días.",
+                "operationId": "a6c032970b97c6876faca03e2a44b09c",
+                "responses": {
+                    "200": {
+                        "description": "Productos trending",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ProductRecommendation"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/search": {
+            "get": {
+                "tags": [
+                    "Catálogo"
+                ],
+                "summary": "Buscar productos",
+                "description": "Busca productos por nombre, descripción o SKU. Usa Meilisearch si está configurado, con fallback a LIKE.",
+                "operationId": "813233ab87cc4814a46bac8b7865a0a0",
+                "parameters": [
+                    {
+                        "name": "q",
+                        "in": "query",
+                        "description": "Término de búsqueda",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de productos encontrados",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ProductSearchItem"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/search/faceted": {
+            "get": {
+                "tags": [
+                    "Catálogo"
+                ],
+                "summary": "Búsqueda facetada",
+                "description": "Búsqueda avanzada con filtros por categoría, marca, precio y disponibilidad. Requiere Meilisearch.",
+                "operationId": "36ae200595f2466f950901e4ff04ee2a",
+                "parameters": [
+                    {
+                        "name": "q",
+                        "in": "query",
+                        "description": "Término de búsqueda",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "category",
+                        "in": "query",
+                        "description": "Filtrar por nombre de categoría",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "brand",
+                        "in": "query",
+                        "description": "Filtrar por nombre de marca",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "min_price",
+                        "in": "query",
+                        "description": "Precio mínimo",
+                        "schema": {
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "name": "max_price",
+                        "in": "query",
+                        "description": "Precio máximo",
+                        "schema": {
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "name": "in_stock",
+                        "in": "query",
+                        "description": "Solo productos en stock",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Resultados paginados con facetas",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/search/suggestions": {
+            "get": {
+                "tags": [
+                    "Catálogo"
+                ],
+                "summary": "Sugerencias de búsqueda",
+                "description": "Retorna hasta 5 nombres de productos que coinciden con el término, más búsquedas recientes.",
+                "operationId": "b7b0609b7633a946d99488ce2c60dd55",
+                "parameters": [
+                    {
+                        "name": "q",
+                        "in": "query",
+                        "description": "Término parcial (mínimo 2 caracteres)",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Sugerencias y búsquedas recientes",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "suggestions": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "recent": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/categories": {
+            "get": {
+                "tags": [
+                    "Catálogo"
+                ],
+                "summary": "Listar categorías",
+                "description": "Retorna todas las categorías activas con su imagen y conteo de productos. Resultado cacheado por 5 minutos.",
+                "operationId": "ceb667ee23130398fa4b2440f9ee5684",
+                "responses": {
+                    "200": {
+                        "description": "Lista de categorías",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/CategoryItem"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/products": {
+            "get": {
+                "tags": [
+                    "Catálogo"
+                ],
+                "summary": "Listar productos",
+                "description": "Retorna productos activos paginados. Se puede filtrar por categoría, destacados y tendencia.",
+                "operationId": "2928e86c48627adb07763cb6cd403e44",
+                "parameters": [
+                    {
+                        "name": "category_slug",
+                        "in": "query",
+                        "description": "Filtrar por slug de categoría",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "featured",
+                        "in": "query",
+                        "description": "Solo productos destacados",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "name": "trending",
+                        "in": "query",
+                        "description": "Ordenar por más vistos",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Número de página",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Productos paginados",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/checkout": {
+            "post": {
+                "tags": [
+                    "Checkout"
+                ],
+                "summary": "Crear orden",
+                "description": "Crea una orden a partir del carrito actual. Soporta múltiples pasarelas de pago (transferencia, Nuvei, PayPhone, Kushki). Requiere autenticación.",
+                "operationId": "607cce48b681a160be1270648f2e081a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CheckoutRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Orden creada exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OrderResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Carrito vacío o stock insuficiente"
+                    },
+                    "401": {
+                        "description": "Autenticación requerida"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/notifications": {
+            "get": {
+                "tags": [
+                    "Notificaciones"
+                ],
+                "summary": "Listar notificaciones",
+                "description": "Retorna las notificaciones del usuario autenticado, paginadas.",
+                "operationId": "0f031f66cd8c52bf73e89fb2d050ad83",
+                "responses": {
+                    "200": {
+                        "description": "Notificaciones paginadas"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/notifications/{id}/read": {
+            "post": {
+                "tags": [
+                    "Notificaciones"
+                ],
+                "summary": "Marcar como leída",
+                "description": "Marca una notificación específica como leída.",
+                "operationId": "e8ec77e64be528452b6b9ee62d832d70",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la notificación",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Notificación marcada como leída"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/notifications/read-all": {
+            "post": {
+                "tags": [
+                    "Notificaciones"
+                ],
+                "summary": "Marcar todas como leídas",
+                "description": "Marca todas las notificaciones no leídas como leídas.",
+                "operationId": "e873443612632a319ae0f88db368dd7a",
+                "responses": {
+                    "200": {
+                        "description": "Todas marcadas como leídas"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/notifications/unread-count": {
+            "get": {
+                "tags": [
+                    "Notificaciones"
+                ],
+                "summary": "Conteo de no leídas",
+                "description": "Retorna el número de notificaciones no leídas.",
+                "operationId": "5120217e8b1a75b2c61e53684a38c045",
+                "responses": {
+                    "200": {
+                        "description": "Conteo",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "count": {
+                                            "type": "integer",
+                                            "example": 5
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "CartResponse": {
+                "title": "Cart Response",
+                "description": "Respuesta del carrito de compras",
+                "properties": {
+                    "data": {
+                        "description": "Datos del carrito con items, subtotal, impuestos y total",
+                        "type": "object"
+                    },
+                    "session_id": {
+                        "description": "ID de sesión del carrito",
+                        "type": "string",
+                        "example": "a1b2c3d4-e5f6-7890"
+                    }
+                },
+                "type": "object"
+            },
+            "CartAddRequest": {
+                "title": "Add to Cart Request",
+                "description": "Datos para agregar un producto al carrito",
+                "required": [
+                    "product_id"
+                ],
+                "properties": {
+                    "product_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "quantity": {
+                        "type": "integer",
+                        "example": 1,
+                        "minimum": 1
+                    },
+                    "variant_id": {
+                        "type": "integer",
+                        "example": null,
+                        "nullable": true
+                    },
+                    "options": {
+                        "type": "object",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "CartUpdateRequest": {
+                "title": "Update Cart Item Request",
+                "description": "Datos para actualizar cantidad de un item",
+                "required": [
+                    "quantity"
+                ],
+                "properties": {
+                    "quantity": {
+                        "type": "integer",
+                        "example": 2,
+                        "minimum": 0
+                    }
+                },
+                "type": "object"
+            },
+            "CouponRequest": {
+                "title": "Apply Coupon Request",
+                "required": [
+                    "code"
+                ],
+                "properties": {
+                    "code": {
+                        "type": "string",
+                        "example": "DESCUENTO10"
+                    }
+                },
+                "type": "object"
+            },
+            "CategoryItem": {
+                "title": "Category Item",
+                "description": "Categoría con conteo de productos",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Electrónicos"
+                    },
+                    "slug": {
+                        "type": "string",
+                        "example": "electronicos"
+                    },
+                    "image_url": {
+                        "type": "string",
+                        "format": "uri",
+                        "nullable": true
+                    },
+                    "products_count": {
+                        "type": "integer",
+                        "example": 24
+                    }
+                },
+                "type": "object"
+            },
+            "CheckoutRequest": {
+                "title": "Checkout / Place Order Request",
+                "description": "Datos para colocar una orden",
+                "required": [
+                    "payment_method",
+                    "shipping_address",
+                    "billing_address"
+                ],
+                "properties": {
+                    "payment_method": {
+                        "description": "Método de pago (transfer, cash_on_delivery, nuvei, payphone, kushki)",
+                        "type": "string",
+                        "example": "transfer"
+                    },
+                    "shipping_address": {
+                        "description": "Dirección de envío",
+                        "type": "object"
+                    },
+                    "billing_address": {
+                        "description": "Dirección de facturación",
+                        "type": "object"
+                    },
+                    "shipping_rate_key": {
+                        "description": "Clave de tarifa de envío",
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "payment_proof": {
+                        "description": "Comprobante de pago (para transferencia)",
+                        "type": "string",
+                        "format": "binary",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "OrderResponse": {
+                "title": "Order Response",
+                "description": "Respuesta al crear una orden",
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "example": "Order placed successfully"
+                    },
+                    "redirect": {
+                        "description": "URL de redirección",
+                        "type": "string",
+                        "format": "uri"
+                    },
+                    "order_id": {
+                        "type": "integer",
+                        "example": 42
+                    }
+                },
+                "type": "object"
+            },
+            "QuotationRequest": {
+                "title": "Quotation Request",
+                "description": "Datos para solicitar una cotización",
+                "required": [
+                    "shipping_address"
+                ],
+                "properties": {
+                    "shipping_address": {
+                        "description": "Dirección de envío",
+                        "type": "object"
+                    },
+                    "notes": {
+                        "description": "Notas adicionales",
+                        "type": "string",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "QuotationResponse": {
+                "title": "Quotation Response",
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "example": "Cotización enviada correctamente"
+                    },
+                    "redirect": {
+                        "type": "string",
+                        "format": "uri"
+                    },
+                    "quotation_id": {
+                        "type": "integer",
+                        "example": 7
+                    },
+                    "quotation_number": {
+                        "type": "string",
+                        "example": "QT-ABC12345"
+                    }
+                },
+                "type": "object"
+            },
+            "ProductListItem": {
+                "title": "Product List Item",
+                "description": "Producto resumido para listados",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Smartphone XYZ"
+                    },
+                    "slug": {
+                        "type": "string",
+                        "example": "smartphone-xyz"
+                    },
+                    "price": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 299.99
+                    },
+                    "formatted_price": {
+                        "type": "string",
+                        "example": "$299.99"
+                    },
+                    "compare_price": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 399.99,
+                        "nullable": true
+                    },
+                    "discount_percentage": {
+                        "type": "integer",
+                        "example": 25,
+                        "nullable": true
+                    },
+                    "is_new": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "image_url": {
+                        "type": "string",
+                        "format": "uri",
+                        "nullable": true
+                    },
+                    "category_name": {
+                        "type": "string",
+                        "example": "Electrónicos",
+                        "nullable": true
+                    },
+                    "url": {
+                        "type": "string",
+                        "format": "uri"
+                    }
+                },
+                "type": "object"
+            },
+            "ProductSearchItem": {
+                "title": "Product Search Item",
+                "description": "Producto en resultados de búsqueda",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Smartphone XYZ"
+                    },
+                    "slug": {
+                        "type": "string",
+                        "example": "smartphone-xyz"
+                    },
+                    "price": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 299.99
+                    },
+                    "formatted_price": {
+                        "type": "string",
+                        "example": "$299.99"
+                    },
+                    "category": {
+                        "type": "string",
+                        "example": "Electrónicos",
+                        "nullable": true
+                    },
+                    "image_url": {
+                        "type": "string",
+                        "format": "uri",
+                        "nullable": true
+                    },
+                    "url": {
+                        "type": "string",
+                        "format": "uri"
+                    }
+                },
+                "type": "object"
+            },
+            "ProductRecommendation": {
+                "title": "Product Recommendation",
+                "description": "Producto recomendado",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Funda Protectora"
+                    },
+                    "slug": {
+                        "type": "string",
+                        "example": "funda-protectora"
+                    },
+                    "price": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 15.99
+                    },
+                    "formatted_price": {
+                        "type": "string",
+                        "example": "$15.99"
+                    },
+                    "image_url": {
+                        "type": "string",
+                        "format": "uri",
+                        "nullable": true
+                    },
+                    "url": {
+                        "type": "string",
+                        "format": "uri"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "sanctum": {
+                "type": "apiKey",
+                "description": "Enter token in format (Bearer <token>)",
+                "name": "Authorization",
+                "in": "header"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Carrito",
+            "description": "Gestión del carrito de compras"
+        },
+        {
+            "name": "Cotizaciones",
+            "description": "Solicitud de cotizaciones online"
+        },
+        {
+            "name": "Recomendaciones",
+            "description": "Motor de recomendaciones de productos"
+        },
+        {
+            "name": "Catálogo",
+            "description": "Búsqueda, categorías y productos del storefront"
+        },
+        {
+            "name": "Checkout",
+            "description": "Proceso de compra y creación de órdenes"
+        },
+        {
+            "name": "Notificaciones",
+            "description": "Gestión de notificaciones del usuario"
+        }
+    ]
+}

@@ -1,0 +1,57 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+    --font-sans: 'Open Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-heading: 'Open Sans', ui-sans-serif, system-ui, sans-serif;
+
+    /* Premium Color Palette */
+    --color-primary-50: #eff4ff;
+    --color-primary-100: #dbe6fe;
+    --color-primary-200: #bfd3fe;
+    --color-primary-300: #93bbfd;
+    --color-primary-400: #609afa;
+    --color-primary-500: #3b82f6;
+    --color-primary-600: #2563eb;
+    --color-primary-700: #1d4ed8;
+    --color-primary-800: #1e40af;
+    --color-primary-900: #1e3a8a;
+    --color-primary-950: #172554;
+
+    --color-gold-400: #fbbf24;
+    --color-gold-500: #f59e0b;
+
+    --color-dark-bg: #030712;
+    /* Gray 950 */
+    --color-dark-surface: #111827;
+    /* Gray 900 */
+}
+
+/* Alpine.js utility */
+[x-cloak] {
+    display: none !important;
+}
+
+/* Brand Slider Animation */
+@keyframes scroll-brands {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+.brand-scroll-track {
+    animation: scroll-brands 30s linear infinite;
+    width: max-content;
+}
+
+.brand-scroll-track.animation-paused {
+    animation-play-state: paused;
+}

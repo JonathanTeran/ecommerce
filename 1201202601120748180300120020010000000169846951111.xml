@@ -1,0 +1,187 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<autorizacion>
+    <estado>AUTORIZADO</estado>
+    <numeroAutorizacion>1201202601120748180300120020010000000169846951111</numeroAutorizacion>
+    <fechaAutorizacion>2026-01-12T15:14:04-05:00</fechaAutorizacion>
+    <ambiente>PRODUCCIÓN</ambiente>
+    <comprobante><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<factura id="comprobante" version="1.1.0">
+  <infoTributaria>
+    <ambiente>2</ambiente>
+    <tipoEmision>1</tipoEmision>
+    <razonSocial>TERAN TRIANA JONATHAN EDUARDO</razonSocial>
+    <nombreComercial>TERAN TRIANA JONATHAN EDUARDO</nombreComercial>
+    <ruc>1207481803001</ruc>
+    <claveAcceso>1201202601120748180300120020010000000169846951111</claveAcceso>
+    <codDoc>01</codDoc>
+    <estab>002</estab>
+    <ptoEmi>001</ptoEmi>
+    <secuencial>000000016</secuencial>
+    <dirMatriz>GUAYAS / GUAYAQUIL / XIMENA</dirMatriz>
+  </infoTributaria>
+  <infoFactura>
+    <fechaEmision>12/01/2026</fechaEmision>
+    <dirEstablecimiento>GUAYAS / GUAYAQUIL / XIMENA</dirEstablecimiento>
+    <obligadoContabilidad>NO</obligadoContabilidad>
+    <tipoIdentificacionComprador>04</tipoIdentificacionComprador>
+    <razonSocialComprador>SOCIEDAD DE MADRES SALESIANAS</razonSocialComprador>
+    <identificacionComprador>1790941450001</identificacionComprador>
+    <direccionComprador>PEDRO MALDONADO 1403 Y JOSÉ DE ANTEPARA</direccionComprador>
+    <totalSinImpuestos>420.00</totalSinImpuestos>
+    <totalDescuento>0.00</totalDescuento>
+    <totalConImpuestos>
+      <totalImpuesto>
+        <codigo>2</codigo>
+        <codigoPorcentaje>4</codigoPorcentaje>
+        <descuentoAdicional>0.00</descuentoAdicional>
+        <baseImponible>420.00</baseImponible>
+        <valor>63.00</valor>
+      </totalImpuesto>
+    </totalConImpuestos>
+    <propina>0.00</propina>
+    <importeTotal>483.00</importeTotal>
+    <moneda>DOLAR</moneda>
+    <pagos>
+      <pago>
+        <formaPago>20</formaPago>
+        <total>483.00</total>
+        <unidadTiempo>dias</unidadTiempo>
+      </pago>
+    </pagos>
+  </infoFactura>
+  <detalles>
+    <detalle>
+      <codigoPrincipal>SERV-INFRA-001</codigoPrincipal>
+      <descripcion>SERVICIO DE INFRAESTRUCTURA NUBE (MENSUAL)</descripcion>
+      <cantidad>1.000000</cantidad>
+      <precioUnitario>210.000000</precioUnitario>
+      <descuento>0.00</descuento>
+      <precioTotalSinImpuesto>210.00</precioTotalSinImpuesto>
+      <detallesAdicionales>
+        <detAdicional nombre="Mes" valor="Diciembre 2025"></detAdicional>
+      </detallesAdicionales>
+      <impuestos>
+        <impuesto>
+          <codigo>2</codigo>
+          <codigoPorcentaje>4</codigoPorcentaje>
+          <tarifa>15.00</tarifa>
+          <baseImponible>210.00</baseImponible>
+          <valor>31.50</valor>
+        </impuesto>
+      </impuestos>
+    </detalle>
+    <detalle>
+      <codigoPrincipal>SERV-INFRA-001</codigoPrincipal>
+      <descripcion>SERVICIO DE INFRAESTRUCTURA NUBE (MENSUAL)</descripcion>
+      <cantidad>1.000000</cantidad>
+      <precioUnitario>210.000000</precioUnitario>
+      <descuento>0.00</descuento>
+      <precioTotalSinImpuesto>210.00</precioTotalSinImpuesto>
+      <detallesAdicionales>
+        <detAdicional nombre="Mes" valor="Enero"></detAdicional>
+      </detallesAdicionales>
+      <impuestos>
+        <impuesto>
+          <codigo>2</codigo>
+          <codigoPorcentaje>4</codigoPorcentaje>
+          <tarifa>15.00</tarifa>
+          <baseImponible>210.00</baseImponible>
+          <valor>31.50</valor>
+        </impuesto>
+      </impuestos>
+    </detalle>
+  </detalles>
+  <infoAdicional>
+    <campoAdicional nombre="DIRECCION">PEDRO MALDONADO 1403 Y JOSÉ DE ANTEPARA</campoAdicional>
+    <campoAdicional nombre="TELEFONO">042364471</campoAdicional>
+    <campoAdicional nombre="EMAIL">contabilidad@mariamazzarello.edu.ec</campoAdicional>
+    <campoAdicional nombre="GENERAL">Contribuyente Régimen General</campoAdicional>
+  </infoAdicional>
+<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:etsi="http://uri.etsi.org/01903/v1.3.2#" Id="Signature884260">
+<ds:SignedInfo Id="Signature-SignedInfo500812">
+<ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"></ds:CanonicalizationMethod>
+<ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"></ds:SignatureMethod>
+<ds:Reference Id="SignedPropertiesID1003907" Type="http://uri.etsi.org/01903#SignedProperties" URI="#Signature884260-SignedProperties267713">
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod>
+<ds:DigestValue>vRV7LhD8Z9rTHmg5FzlU6HPhV/4=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference URI="#Certificate1322117">
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod>
+<ds:DigestValue>NtKgulJyRASLfIkmBz3GyuvllK0=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference Id="Reference-ID-357093" URI="#comprobante">
+<ds:Transforms>
+<ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"></ds:Transform>
+</ds:Transforms>
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod>
+<ds:DigestValue>33TOeqWK1ormhEgAFq0v05REF8Y=</ds:DigestValue>
+</ds:Reference>
+</ds:SignedInfo>
+<ds:SignatureValue Id="SignatureValue949230">
+CLDgtll8aKBPaspg689eZ9BC8A77bANwRT5gXjlYI0sZWE3H+1LHWkWY1UVeQzEuyDSn1Yb//TWr
+nP/ImV/XlAv4cuesJGMj47fF3yyAon/UIfXAZJ0wD8paq0U/UOC0QiFlsLrNeYAf3O2kgsVciRYp
+4nqNGaFUBfwXCXVR1q0rwQd+biwWCpGI//R+aI/nuxiwjS6SlJAc1NOgu20EjIFDLCbgyZTGcNDw
+14QDdB4MUNnGkMbNs5DNez39XCIYxKC3QipWWel8MXlZdcYSKGRO4rgFPqCXQyEIOdQSZndVT67e
+hQpjFa9+5sGLuvZ9I0bOqUue8ZCCbflTWwvrTg==
+</ds:SignatureValue>
+<ds:KeyInfo Id="Certificate1322117">
+<ds:X509Data>
+<ds:X509Certificate>
+MIIJITCCBwmgAwIBAgIIVz2IZkg/VuYwDQYJKoZIhvcNAQELBQAwgbgxCzAJBgNVBAYTAkVTMUQw
+QgYDVQQHDDtCYXJjZWxvbmEgKHNlZSBjdXJyZW50IGFkZHJlc3MgYXQgd3d3LnVhbmF0YWNhLmNv
+bS9hZGRyZXNzKTEWMBQGA1UECgwNVUFOQVRBQ0EgUy5BLjEVMBMGA1UECwwMVFNQLVVBTkFUQUNB
+MRowGAYDVQQDDBFVQU5BVEFDQSBDQTIgMjAxNjEYMBYGA1UEYQwPVkFURVMtQTY2NzIxNDk5MB4X
+DTI1MDkxMDAyNTAwMFoXDTI2MDkxMDAyNTAwMFowgaAxCzAJBgNVBAYTAkVDMRUwEwYDVQQEDAxU
+RVJBTiBUUklBTkExGTAXBgNVBCoMEEpPTkFUSEFOIEVEVUFSRE8xGTAXBgNVBAUTEElEQ0VDLTEy
+MDc0ODE4MDMxJjAkBgNVBAMMHUpPTkFUSEFOIEVEVUFSRE8gVEVSQU4gVFJJQU5BMRwwGgYDVQRh
+DBNUSU5FQy0xMjA3NDgxODAzMDAxMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuQaH
+6P/QIq8VzS089aQjrT4mJrCaOL5k2v1r59RnoSXsgyygWH+3OyulfJRFpQNF4gwkzJ6s8u1FnumV
+TJbzH0QXcoMi06S3mrqzKuiY3pnP3tPUcWMFRuWXp3WE6dFHlNVKLprQCTWplmfZdmkaUcO9V5iE
+Shty0s9H/1OYVqh+jcgBGt1Yf7hWY9Secx4BQ2UuYgEiIih3tb25AeqfTgxnoL/eHkXMeztkLIv9
+zGwoxkzf7649YlsKLOIMtUE/jARkzFV98jCCzKCGWnMyPctOb+RtGvjMgI4bkGTPmMV+CtT0Vf9M
+AZ/6yhdsIP8aJEsFGvN9QbE6TeEiHLs5uQIDAQABo4IEQzCCBD8wGwYLKwYBBAGC8TZmAwEEDAwK
+MTIwNzQ4MTgwMzAeBgsrBgEEAYLxNmYDCwQPDA0xMjA3NDgxODAzMDAxMIHXBggrBgEFBQcBAQSB
+yjCBxzBVBggrBgEFBQcwAoZJaHR0cDovL3d3dy51YW5hdGFjYS5jb20vcHVibGljL2Rvd25sb2Fk
+L3RzcF9jZXJ0aWZpY2F0ZXMvc3Vib3JkaW5hdGUxLmNydDA2BggrBgEFBQcwAYYqaHR0cDovL29j
+c3AxLnVhbmF0YWNhLmNvbS9wdWJsaWMvcGtpL29jc3AvMDYGCCsGAQUFBzABhipodHRwOi8vb2Nz
+cDIudWFuYXRhY2EuY29tL3B1YmxpYy9wa2kvb2NzcC8wHQYDVR0OBBYEFCIkexguPOfWEw+xZhOZ
+DELSr/GJMAwGA1UdEwEB/wQCMAAwHwYDVR0jBBgwFoAUfVfnYHPOB0ap4qNo8OERsnSSc/0wgZkG
+A1UdIASBkTCBjjCBiwYMKwYBBAGC8TZmAgEBMHswNwYIKwYBBQUHAgEWK2h0dHBzOi8vd3d3LnVh
+bmF0YWNhLmNvbS9wdWJsaWMvcGtpL2RwYy1lYy8wQAYIKwYBBQUHAgIwNAwyQ0VSVElGSUNBRE8g
+REUgUEVSU09OQSBOQVRVUkFMIE8gRklTSUNBIEVOIEFSQ0hJVk8wgY8GA1UdHwSBhzCBhDBAoD6g
+PIY6aHR0cDovL2NybDEudWFuYXRhY2EuY29tL3B1YmxpYy9wa2kvY3JsL0NBMnN1Ym9yZGluYWRh
+LmNybDBAoD6gPIY6aHR0cDovL2NybDIudWFuYXRhY2EuY29tL3B1YmxpYy9wa2kvY3JsL0NBMnN1
+Ym9yZGluYWRhLmNybDAOBgNVHQ8BAf8EBAMCBeAwHQYDVR0lBBYwFAYIKwYBBQUHAwIGCCsGAQUF
+BwMEMIIBeQYDVR0RBIIBcDCCAWyBFGpvLXRlcmFuQGhvdG1haWwuY29toBsGCysGAQQBgvE2ZgMB
+oAwMCjEyMDc0ODE4MDOgIQYLKwYBBAGC8TZmAwKgEgwQSk9OQVRIQU4gRURVQVJET6AWBgsrBgEE
+AYLxNmYDA6AHDAVURVJBTqAXBgsrBgEEAYLxNmYDBKAIDAZUUklBTkGgLAYLKwYBBAGC8TZmAweg
+HQwbR1VBWUFTIC8gR1VBWUFRVUlMIC8gWElNRU5BoB8GCysGAQQBgvE2ZgMIoBAMDjAwNTkzOTg2
+MDU5NzI3oBoGCysGAQQBgvE2ZgMJoAsMCUdVQVlBUVVJTKAeBgsrBgEEAYLxNmYDC6APDA0xMjA3
+NDgxODAzMDAxoBMGCysGAQQBgvE2ZgMMoAQMAkVDoCkGCysGAQQBgvE2ZgMyoBoMGFBFUlNPTkEg
+TkFUVVJBTCBPIEZJU0lDQaAYBgsrBgEEAYLxNmYDM6AJDAdBUkNISVZPMA0GCSqGSIb3DQEBCwUA
+A4ICAQDLGIn4p5PA+Bo1Eeg5WyuU/GNhC22ZexLczGQ/AUdl/3h3kuPzXvpCFNIvEf5CDmMvU74n
+3CJbvLZ54d6IPuY+BBpWweQ5YMZCDwH9GVXqopiz6SMDJfWDOvZW0GOn8AIreiYaq85HoBRzhY3R
+mmNsxLW75ABT08OXrG3FnAezs2LfvPnKbz/SodJlm8+46YnUv4et0Yi3e2Bug5nbyvpwVlkanmrN
+ERBSjSqaEBzVVGPdkORHfhZwNIU43jWyJZD2WPjgB+sbXwQnXDQ4VeNEYL1/znkmgSbn/9L2LAcu
+2qvIueCUOvCE/Hlgur5U3XzPx7DjAcsHaqONKwqni9Gua3hfE8UeAXBv+2g12UDNqir1VtqAENLr
+S6Ozww2aWR1jp8049gacK5wBungILyylvXsueeQIvQC00E27RNotJdnq2x7oZ2znl2cbKOF54fwA
+BxYDdqLZOI4N7Ku/MZmxnzbCl7d8I/mJSODf8PZ5tf6So0oP8Wxr33964yvSm30aSK5m2dr1EV9g
+ll/eu5tAmdmeO5oTfxfz3stkMAdNpUNA77qQ80MmgXSbOV14mWqzJ8xbvPEABjycKCByeoffV/GR
+7UngpRzREalT9wSZ3hZNjNdogd6Ps1M/moltIzTpLNVpj8ZbAv8NzsR/vpXuSIsXADzIiMz3j4mJ
+Ym1BHA==
+</ds:X509Certificate>
+</ds:X509Data>
+<ds:KeyValue>
+<ds:RSAKeyValue>
+<ds:Modulus>
+uQaH6P/QIq8VzS089aQjrT4mJrCaOL5k2v1r59RnoSXsgyygWH+3OyulfJRFpQNF4gwkzJ6s8u1F
+numVTJbzH0QXcoMi06S3mrqzKuiY3pnP3tPUcWMFRuWXp3WE6dFHlNVKLprQCTWplmfZdmkaUcO9
+V5iEShty0s9H/1OYVqh+jcgBGt1Yf7hWY9Secx4BQ2UuYgEiIih3tb25AeqfTgxnoL/eHkXMeztk
+LIv9zGwoxkzf7649YlsKLOIMtUE/jARkzFV98jCCzKCGWnMyPctOb+RtGvjMgI4bkGTPmMV+CtT0
+Vf9MAZ/6yhdsIP8aJEsFGvN9QbE6TeEiHLs5uQ==
+</ds:Modulus>
+<ds:Exponent>AQAB</ds:Exponent>
+</ds:RSAKeyValue>
+</ds:KeyValue>
+</ds:KeyInfo>
+<ds:Object Id="Signature884260-Object306669"><etsi:QualifyingProperties Target="#Signature884260"><etsi:SignedProperties Id="Signature884260-SignedProperties267713"><etsi:SignedSignatureProperties><etsi:SigningTime>2026-01-12T15:14:01-05:00</etsi:SigningTime><etsi:SigningCertificate><etsi:Cert><etsi:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod><ds:DigestValue>tjw1kVsjER9YtFVlacAsb3itnAs=</ds:DigestValue></etsi:CertDigest><etsi:IssuerSerial><ds:X509IssuerName>2.5.4.97=#0c0f56415445532d413636373231343939,CN=UANATACA CA2 2016,OU=TSP-UANATACA,O=UANATACA S.A.,L=Barcelona (see current address at www.uanataca.com/address),C=ES</ds:X509IssuerName><ds:X509SerialNumber>6286330627759232742</ds:X509SerialNumber></etsi:IssuerSerial></etsi:Cert></etsi:SigningCertificate></etsi:SignedSignatureProperties><etsi:SignedDataObjectProperties><etsi:DataObjectFormat ObjectReference="#Reference-ID-357093"><etsi:Description>DOCUMENTO EMITIDO CON ECUAFACT. LA FACTURACION ELECTRONICA DEL ECUADOR. Visitenos en http://www.ecuanexus.com </etsi:Description><etsi:MimeType>text/xml</etsi:MimeType></etsi:DataObjectFormat></etsi:SignedDataObjectProperties></etsi:SignedProperties></etsi:QualifyingProperties></ds:Object></ds:Signature></factura>]]></comprobante> <mensajes>  </mensajes> </autorizacion>
