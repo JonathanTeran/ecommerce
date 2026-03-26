@@ -213,35 +213,65 @@
                     {{-- Grid --}}
                     <div class="grid grid-cols-2 gap-3 sm:gap-6 {{ match((int) $shopGridCols) { 2 => 'md:grid-cols-2', 4 => 'md:grid-cols-3 lg:grid-cols-4', default => 'md:grid-cols-3' } }}">
                         @forelse($products as $product)
+                            @php
+                                $discount = ($product->compare_price && $product->compare_price > $product->price)
+                                    ? round(($product->compare_price - $product->price) / $product->compare_price * 100)
+                                    : null;
+                                $avgRating = $product->reviews()->avg('rating');
+                                $reviewsCount = $product->reviews()->count();
+                            @endphp
                             <div
-                                class="group relative bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-2xl p-4 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
-                                <div
-                                    class="aspect-[3/4] w-full overflow-hidden rounded-xl bg-gray-100 dark:bg-zinc-950 relative mb-4">
-                                    <img src="{{ $product->image_url }}" alt="{{ $product->name }}"
-                                        class="h-full w-full object-cover object-center group-hover:scale-105 transition duration-300">
+                                class="group relative bg-white dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
+                                <div class="aspect-square w-full overflow-hidden bg-gray-50 dark:bg-zinc-800 relative">
+                                    <a href="{{ route('products.show', $product) }}">
+                                        <img src="{{ $product->image_url }}" alt="{{ $product->name }}"
+                                            class="h-full w-full object-cover group-hover:scale-105 transition duration-500">
+                                    </a>
+                                    {{-- Badges --}}
+                                    <div class="absolute top-2 left-2 flex flex-col gap-1.5">
+                                        @if($discount)
+                                            <span class="inline-flex px-2.5 py-1 rounded-lg text-xs font-bold bg-red-500 text-white shadow-sm">-{{ $discount }}%</span>
+                                        @elseif($product->is_new)
+                                            <span class="inline-flex px-2.5 py-1 rounded-lg text-xs font-bold bg-emerald-500 text-white shadow-sm">NUEVO</span>
+                                        @elseif($product->is_featured)
+                                            <span class="inline-flex px-2.5 py-1 rounded-lg text-xs font-bold bg-amber-500 text-white shadow-sm">TOP</span>
+                                        @endif
+                                    </div>
                                     {{-- Quick Add --}}
                                     <button @click="$store.cart.add({{ $product->id }})"
-                                        class="absolute bottom-4 right-4 bg-white text-black p-3 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all translate-y-4 group-hover:translate-y-0 hover:bg-gray-100 z-10">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                                        class="absolute bottom-3 right-3 bg-indigo-600 text-white p-2.5 rounded-xl shadow-lg opacity-0 group-hover:opacity-100 transition-all translate-y-2 group-hover:translate-y-0 hover:bg-indigo-700 z-10">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"></path>
                                         </svg>
                                     </button>
                                 </div>
-                                <div class="flex flex-col flex-grow justify-between">
+                                <div class="p-3 md:p-4 flex flex-col flex-grow justify-between">
                                     <div>
-                                        <h3 class="text-sm font-semibold text-gray-900 dark:text-white mb-1">
-                                            <a href="{{ route('products.show', $product) }}">
-                                                <span aria-hidden="true" class="absolute inset-0 z-0"></span>
+                                        @if($product->brand)
+                                            <p class="text-[10px] md:text-xs font-semibold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider mb-1">{{ $product->brand->name }}</p>
+                                        @endif
+                                        <h3 class="text-sm font-semibold text-gray-900 dark:text-white leading-tight line-clamp-2 mb-2">
+                                            <a href="{{ route('products.show', $product) }}" class="hover:text-indigo-600 transition-colors">
                                                 {{ $product->name }}
                                             </a>
                                         </h3>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">
-                                            {{ $product->category->name ?? __('Uncategorized') }}</p>
+                                        @if($reviewsCount > 0)
+                                            <div class="flex items-center gap-1 mb-2">
+                                                @for($i = 1; $i <= 5; $i++)
+                                                    <svg class="w-3.5 h-3.5 {{ $i <= round($avgRating) ? 'text-amber-400' : 'text-gray-200 dark:text-zinc-700' }}" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                                    </svg>
+                                                @endfor
+                                                <span class="text-xs text-gray-400 ml-1">({{ $reviewsCount }})</span>
+                                            </div>
+                                        @endif
                                     </div>
-                                    <p class="text-lg font-bold text-gray-900 dark:text-white">
-                                        {{ $product->formatted_price }}</p>
+                                    <div class="flex items-baseline gap-2">
+                                        <span class="text-lg font-bold text-gray-900 dark:text-white">{{ $product->formatted_price }}</span>
+                                        @if($product->compare_price && $product->compare_price > $product->price)
+                                            <span class="text-sm text-gray-400 line-through">${{ number_format($product->compare_price, 2) }}</span>
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
                         @empty

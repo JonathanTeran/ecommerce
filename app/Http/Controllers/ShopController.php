@@ -11,7 +11,7 @@ class ShopController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Product::query()->where('is_active', true)->withReviewStats();
+        $query = Product::query()->where('is_active', true)->with(['brand', 'media'])->withReviewStats();
 
         // Filter by Category (include all descendant subcategories)
         if ($request->has('category')) {

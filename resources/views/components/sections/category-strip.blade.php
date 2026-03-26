@@ -49,6 +49,9 @@
                             @endif
                         </div>
                         <span class="text-sm font-bold text-gray-700 dark:text-gray-300 group-hover:text-primary-600 transition">{{ $category->name }}</span>
+                        @if(($category->products_count ?? 0) > 0)
+                            <span class="text-xs text-gray-400 dark:text-gray-500 -mt-1">{{ $category->products_count }} {{ __('productos') }}</span>
+                        @endif
                     </a>
                 @endforeach
             @endif

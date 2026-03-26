@@ -63,11 +63,13 @@ class HomeController extends Controller
             $categories = Category::active()
                 ->featured()
                 ->ordered()
+                ->withCount(['products' => fn ($q) => $q->where('is_active', true)])
                 ->with('media')
                 ->take(6)
                 ->get();
         } else {
             $categories = Category::whereIn('id', $categoryIds)
+                ->withCount(['products' => fn ($q) => $q->where('is_active', true)])
                 ->with('media')
                 ->get();
         }
@@ -90,14 +92,31 @@ class HomeController extends Controller
         };
 
         return [
-            'products' => $products->map(fn ($product) => [
-                'id' => $product->id,
-                'name' => $product->name,
-                'image_url' => $product->primary_image_url,
-                'url' => route('products.show', $product),
-                'category_name' => $product->category?->name,
-                'formatted_price' => $product->formatted_price,
-            ]),
+            'products' => $products->map(function ($product) {
+                $discount = ($product->compare_price && $product->compare_price > $product->price)
+                    ? round((($product->compare_price - $product->price) / $product->compare_price) * 100)
+                    : null;
+
+                return [
+                    'id' => $product->id,
+                    'name' => $product->name,
+                    'image_url' => $product->primary_image_url,
+                    'url' => route('products.show', $product),
+                    'category_name' => $product->category?->name,
+                    'brand_name' => $product->brand?->name,
+                    'formatted_price' => $product->formatted_price,
+                    'price' => $product->price,
+                    'compare_price' => $product->compare_price,
+                    'formatted_compare_price' => $product->compare_price ? '$' . number_format($product->compare_price, 2) : null,
+                    'discount_percent' => $discount,
+                    'is_new' => (bool) $product->is_new,
+                    'is_featured' => (bool) $product->is_featured,
+                    'rating' => round($product->reviews()->avg('rating') ?? 0, 1),
+                    'reviews_count' => $product->reviews()->count(),
+                    'in_stock' => $product->quantity > 0,
+                    'low_stock' => $product->quantity > 0 && $product->quantity <= ($product->low_stock_threshold ?? 5),
+                ];
+            }),
         ];
     }
 
