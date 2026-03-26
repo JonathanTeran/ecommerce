@@ -91,7 +91,7 @@
                         @if ($product->is_in_stock)
                             <span
                                 class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
-                                In Stock
+                                {{ __('In Stock') }}
                             </span>
                         @else
                             <span
