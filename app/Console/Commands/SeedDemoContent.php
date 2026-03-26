@@ -115,7 +115,7 @@ class SeedDemoContent extends Command
                 'type' => SectionType::ProductGrid,
                 'name' => 'Productos Destacados',
                 'config' => [
-                    'heading' => '⭐ Productos Destacados',
+                    'heading' => 'Productos Destacados',
                     'source' => 'featured',
                     'category_id' => null,
                     'limit' => 8,
@@ -172,7 +172,7 @@ class SeedDemoContent extends Command
                 'type' => SectionType::ProductGrid,
                 'name' => 'Nuevos Productos',
                 'config' => [
-                    'heading' => '🆕 Recién Llegados',
+                    'heading' => 'Recién Llegados',
                     'source' => 'new',
                     'category_id' => null,
                     'limit' => 4,
