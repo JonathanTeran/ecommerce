@@ -263,11 +263,12 @@ class DemoStoreSeeder extends Seeder
             }
         }
 
-        // Update average ratings
+        // Update review counts
         foreach ($featuredProducts as $product) {
-            $avg = Review::withoutGlobalScopes()->where('product_id', $product->id)->avg('rating');
             $count = Review::withoutGlobalScopes()->where('product_id', $product->id)->count();
-            $product->update(['average_rating' => round($avg, 1), 'reviews_count' => $count]);
+            if ($product->getConnection()->getSchemaBuilder()->hasColumn('products', 'reviews_count')) {
+                $product->update(['reviews_count' => $count]);
+            }
         }
 
         $this->command->info("Reviews created for {$featuredProducts->count()} products.");
