@@ -13,11 +13,15 @@ class ShopController extends Controller
     {
         $query = Product::query()->where('is_active', true)->withReviewStats();
 
-        // Filter by Category
+        // Filter by Category (include all descendant subcategories)
         if ($request->has('category')) {
-            $query->whereHas('category', function ($q) use ($request) {
-                $q->where('slug', $request->category);
-            });
+            $category = Category::where('slug', $request->category)->first();
+
+            if ($category) {
+                $categoryIds = $category->getAllDescendantIds();
+                $categoryIds[] = $category->id;
+                $query->whereIn('category_id', $categoryIds);
+            }
         }
 
         // Filter by Brand
@@ -73,7 +77,7 @@ class ShopController extends Controller
 
         $title = __('Tienda');
         if ($request->has('category')) {
-            $activeCategory = $categories->firstWhere('slug', $request->category);
+            $activeCategory = Category::where('slug', $request->category)->first();
             $title = $activeCategory?->meta_title ?: ($activeCategory?->name ?: __('Tienda'));
         }
         $metaDescription = __('Explora nuestro catálogo de productos.');
