@@ -34,6 +34,10 @@ class SuperAdminPanelProvider extends PanelProvider
             ->brandLogoHeight('3rem')
             ->sidebarCollapsibleOnDesktop()
             ->spa()
+            ->renderHook(
+                \Filament\View\PanelsRenderHook::SCRIPTS_AFTER,
+                fn (): string => view('filament.hooks.sidebar-scroll-persist')->render()
+            )
             ->unsavedChangesAlerts()
             ->databaseNotifications()
             ->discoverResources(in: app_path('Filament/SuperAdmin/Resources'), for: 'App\\Filament\\SuperAdmin\\Resources')

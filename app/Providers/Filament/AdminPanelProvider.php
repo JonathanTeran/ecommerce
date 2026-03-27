@@ -37,6 +37,10 @@ class AdminPanelProvider extends PanelProvider
                 \Filament\View\PanelsRenderHook::HEAD_END,
                 fn (): string => '<script>window.__CURRENCY_SYMBOL__ = ' . json_encode(\App\Models\GeneralSetting::getCurrencySymbol()) . ';</script>'
             )
+            ->renderHook(
+                \Filament\View\PanelsRenderHook::SCRIPTS_AFTER,
+                fn (): string => view('filament.hooks.sidebar-scroll-persist')->render()
+            )
             ->login()
             ->colors(function () {
                 $color = \App\Models\GeneralSetting::first()?->theme_color ?? 'indigo';
