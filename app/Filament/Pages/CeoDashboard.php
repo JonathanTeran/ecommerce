@@ -45,6 +45,23 @@ class CeoDashboard extends Page
         return static::canAccess();
     }
 
+    protected function resolveTranslatableName(mixed $value): string
+    {
+        if (! is_string($value)) {
+            return (string) $value;
+        }
+
+        $decoded = json_decode($value, true);
+
+        if (! is_array($decoded)) {
+            return $value;
+        }
+
+        $locale = app()->getLocale();
+
+        return $decoded[$locale] ?? $decoded['es'] ?? $decoded['en'] ?? reset($decoded) ?: $value;
+    }
+
     // ═══════════════════════════════════════════
     // KPIs PRINCIPALES
     // ═══════════════════════════════════════════
@@ -240,7 +257,8 @@ class CeoDashboard extends Page
             ->groupBy('products.id', 'products.name')
             ->orderByDesc('revenue')
             ->limit(5)
-            ->get();
+            ->get()
+            ->each(fn ($item) => $item->name = $this->resolveTranslatableName($item->name));
     }
 
     public function getRecentOrders(): \Illuminate\Support\Collection

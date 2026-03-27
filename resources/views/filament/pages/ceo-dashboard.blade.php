@@ -14,7 +14,7 @@
     <div class="grid grid-cols-2 gap-4 lg:grid-cols-4">
         <div class="rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-700 p-5 text-white shadow-lg">
             <div class="flex items-center justify-between mb-3">
-                <span class="text-emerald-100 text-xs font-semibold uppercase tracking-wider">{{ __('Revenue Today') }}</span>
+                <span class="text-emerald-100 text-xs font-semibold uppercase tracking-wider">{{ __('Ingresos Hoy') }}</span>
                 <x-heroicon-s-banknotes class="w-6 h-6 text-emerald-200/60" />
             </div>
             <div class="text-2xl font-bold">${{ number_format($revenue['today'], 2) }}</div>
@@ -22,7 +22,7 @@
 
         <div class="rounded-xl bg-gradient-to-br from-blue-500 to-blue-700 p-5 text-white shadow-lg">
             <div class="flex items-center justify-between mb-3">
-                <span class="text-blue-100 text-xs font-semibold uppercase tracking-wider">{{ __('This Month') }}</span>
+                <span class="text-blue-100 text-xs font-semibold uppercase tracking-wider">{{ __('Este Mes') }}</span>
                 <x-heroicon-s-calendar class="w-6 h-6 text-blue-200/60" />
             </div>
             <div class="text-2xl font-bold">${{ number_format($revenue['this_month'], 2) }}</div>
@@ -40,7 +40,7 @@
 
         <div class="rounded-xl bg-gradient-to-br from-violet-500 to-violet-700 p-5 text-white shadow-lg">
             <div class="flex items-center justify-between mb-3">
-                <span class="text-violet-100 text-xs font-semibold uppercase tracking-wider">{{ __('Annual Revenue') }}</span>
+                <span class="text-violet-100 text-xs font-semibold uppercase tracking-wider">{{ __('Ingresos Anuales') }}</span>
                 <x-heroicon-s-chart-bar class="w-6 h-6 text-violet-200/60" />
             </div>
             <div class="text-2xl font-bold">${{ number_format($revenue['this_year'], 2) }}</div>
@@ -48,7 +48,7 @@
 
         <div class="rounded-xl bg-gradient-to-br from-amber-500 to-amber-700 p-5 text-white shadow-lg">
             <div class="flex items-center justify-between mb-3">
-                <span class="text-amber-100 text-xs font-semibold uppercase tracking-wider">{{ __('Avg Order Value') }}</span>
+                <span class="text-amber-100 text-xs font-semibold uppercase tracking-wider">{{ __('Ticket Promedio') }}</span>
                 <x-heroicon-s-receipt-percent class="w-6 h-6 text-amber-200/60" />
             </div>
             <div class="text-2xl font-bold">${{ number_format($orders['avg_order_value'], 2) }}</div>
@@ -60,7 +60,7 @@
         <x-filament::section class="lg:col-span-1">
             <div class="text-center">
                 <div class="text-3xl font-bold text-gray-900 dark:text-white">{{ $orders['this_month'] }}</div>
-                <div class="text-xs text-gray-500 mt-1">{{ __('Orders this month') }}</div>
+                <div class="text-xs text-gray-500 mt-1">{{ __('Pedidos este mes') }}</div>
                 <div class="mt-1 text-xs {{ $orders['growth_pct'] >= 0 ? 'text-emerald-600' : 'text-red-600' }}">
                     {{ $orders['growth_pct'] >= 0 ? '+' : '' }}{{ $orders['growth_pct'] }}%
                 </div>
@@ -70,36 +70,36 @@
         <x-filament::section class="lg:col-span-1">
             <div class="text-center">
                 <div class="text-3xl font-bold text-amber-600">{{ $orders['pending'] }}</div>
-                <div class="text-xs text-gray-500 mt-1">{{ __('Pending') }}</div>
+                <div class="text-xs text-gray-500 mt-1">{{ __('Pendientes') }}</div>
             </div>
         </x-filament::section>
 
         <x-filament::section class="lg:col-span-1">
             <div class="text-center">
                 <div class="text-3xl font-bold text-blue-600">{{ $orders['processing'] }}</div>
-                <div class="text-xs text-gray-500 mt-1">{{ __('Processing') }}</div>
+                <div class="text-xs text-gray-500 mt-1">{{ __('Procesando') }}</div>
             </div>
         </x-filament::section>
 
         <x-filament::section class="lg:col-span-1">
             <div class="text-center">
                 <div class="text-3xl font-bold text-gray-900 dark:text-white">{{ number_format($customers['total']) }}</div>
-                <div class="text-xs text-gray-500 mt-1">{{ __('Total Customers') }}</div>
-                <div class="mt-1 text-xs text-emerald-600">+{{ $customers['new_this_month'] }} {{ __('new') }}</div>
+                <div class="text-xs text-gray-500 mt-1">{{ __('Total Clientes') }}</div>
+                <div class="mt-1 text-xs text-emerald-600">+{{ $customers['new_this_month'] }} {{ __('nuevos') }}</div>
             </div>
         </x-filament::section>
 
         <x-filament::section class="lg:col-span-1">
             <div class="text-center">
                 <div class="text-3xl font-bold text-violet-600">{{ $customers['conversion_rate'] }}%</div>
-                <div class="text-xs text-gray-500 mt-1">{{ __('Conversion') }}</div>
+                <div class="text-xs text-gray-500 mt-1">{{ __('Conversión') }}</div>
             </div>
         </x-filament::section>
 
         <x-filament::section class="lg:col-span-1">
             <div class="text-center">
                 <div class="text-3xl font-bold text-cyan-600">{{ $customers['repeat_rate'] }}%</div>
-                <div class="text-xs text-gray-500 mt-1">{{ __('Repeat Rate') }}</div>
+                <div class="text-xs text-gray-500 mt-1">{{ __('Tasa de Recompra') }}</div>
             </div>
         </x-filament::section>
     </div>
@@ -107,14 +107,14 @@
     {{-- Row 3: Charts --}}
     <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
         {{-- Revenue Chart (2/3 width) --}}
-        <x-filament::section class="lg:col-span-2" heading="{{ __('Monthly Revenue & Orders (12 months)') }}" icon="heroicon-o-chart-bar">
+        <x-filament::section class="lg:col-span-2" heading="{{ __('Ingresos y Pedidos Mensuales (12 meses)') }}" icon="heroicon-o-chart-bar">
             <div style="height: 320px;">
                 <canvas id="ceoRevenueChart"></canvas>
             </div>
         </x-filament::section>
 
         {{-- Order Status Pie (1/3 width) --}}
-        <x-filament::section heading="{{ __('Order Status') }}" icon="heroicon-o-chart-pie">
+        <x-filament::section heading="{{ __('Estado de Pedidos') }}" icon="heroicon-o-chart-pie">
             <div style="height: 320px;">
                 <canvas id="ceoStatusChart"></canvas>
             </div>
@@ -124,11 +124,11 @@
     {{-- Row 4: Tables --}}
     <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
         {{-- Top Products --}}
-        <x-filament::section heading="{{ __('Top Products by Revenue') }}" icon="heroicon-o-trophy">
+        <x-filament::section heading="{{ __('Top Productos por Ingresos') }}" icon="heroicon-o-trophy">
             @if($topProducts->isEmpty())
                 <div class="py-8 text-center text-gray-400">
                     <x-heroicon-o-shopping-bag class="w-10 h-10 mx-auto mb-2 opacity-50" />
-                    <p class="text-sm">{{ __('No sales data yet') }}</p>
+                    <p class="text-sm">{{ __('Sin datos de ventas aún') }}</p>
                 </div>
             @else
                 <div class="space-y-3">
@@ -149,7 +149,7 @@
                                 <div class="w-full bg-gray-100 dark:bg-gray-800 rounded-full h-1.5">
                                     <div class="bg-primary-500 h-1.5 rounded-full transition-all" style="width: {{ ($p->revenue / $maxRevenue) * 100 }}%"></div>
                                 </div>
-                                <div class="text-[11px] text-gray-400 mt-0.5">{{ number_format($p->qty) }} {{ __('units sold') }}</div>
+                                <div class="text-[11px] text-gray-400 mt-0.5">{{ number_format($p->qty) }} {{ __('unidades vendidas') }}</div>
                             </div>
                         </div>
                     @endforeach
@@ -158,20 +158,20 @@
         </x-filament::section>
 
         {{-- Recent Orders --}}
-        <x-filament::section heading="{{ __('Latest Orders') }}" icon="heroicon-o-clipboard-document-list">
+        <x-filament::section heading="{{ __('Últimos Pedidos') }}" icon="heroicon-o-clipboard-document-list">
             @if($recentOrders->isEmpty())
                 <div class="py-8 text-center text-gray-400">
                     <x-heroicon-o-inbox class="w-10 h-10 mx-auto mb-2 opacity-50" />
-                    <p class="text-sm">{{ __('No orders yet') }}</p>
+                    <p class="text-sm">{{ __('Sin pedidos aún') }}</p>
                 </div>
             @else
                 <div class="overflow-x-auto -mx-4 sm:mx-0">
                     <table class="w-full text-sm">
                         <thead>
                             <tr class="border-b border-gray-100 dark:border-gray-800">
-                                <th class="px-3 py-2 text-left text-[11px] font-semibold text-gray-400 uppercase">{{ __('Order') }}</th>
-                                <th class="px-3 py-2 text-left text-[11px] font-semibold text-gray-400 uppercase">{{ __('Customer') }}</th>
-                                <th class="px-3 py-2 text-center text-[11px] font-semibold text-gray-400 uppercase">{{ __('Status') }}</th>
+                                <th class="px-3 py-2 text-left text-[11px] font-semibold text-gray-400 uppercase">{{ __('Pedido') }}</th>
+                                <th class="px-3 py-2 text-left text-[11px] font-semibold text-gray-400 uppercase">{{ __('Cliente') }}</th>
+                                <th class="px-3 py-2 text-center text-[11px] font-semibold text-gray-400 uppercase">{{ __('Estado') }}</th>
                                 <th class="px-3 py-2 text-right text-[11px] font-semibold text-gray-400 uppercase">{{ __('Total') }}</th>
                             </tr>
                         </thead>
@@ -194,7 +194,7 @@
                                             ];
                                         @endphp
                                         <span class="inline-flex px-2 py-0.5 rounded-full text-[10px] font-semibold {{ $statusColors[$order->status->value] ?? 'bg-gray-100 text-gray-600' }}">
-                                            {{ $order->status->value }}
+                                            {{ $order->status->getLabel() }}
                                         </span>
                                     </td>
                                     <td class="px-3 py-2.5 text-right font-semibold text-gray-900 dark:text-white text-xs">${{ number_format($order->total, 2) }}</td>
@@ -216,7 +216,7 @@
                 </div>
                 <div>
                     <div class="text-xl font-bold text-gray-900 dark:text-white">{{ $inventory['total_products'] }}</div>
-                    <div class="text-xs text-gray-500">{{ __('Active Products') }}</div>
+                    <div class="text-xs text-gray-500">{{ __('Productos Activos') }}</div>
                 </div>
             </div>
         </x-filament::section>
@@ -228,7 +228,7 @@
                 </div>
                 <div>
                     <div class="text-xl font-bold text-gray-900 dark:text-white">${{ number_format($inventory['inventory_value'], 0) }}</div>
-                    <div class="text-xs text-gray-500">{{ __('Inventory Value') }}</div>
+                    <div class="text-xs text-gray-500">{{ __('Valor Inventario') }}</div>
                 </div>
             </div>
         </x-filament::section>
@@ -240,7 +240,7 @@
                 </div>
                 <div>
                     <div class="text-xl font-bold text-amber-600">{{ $inventory['low_stock'] }}</div>
-                    <div class="text-xs text-gray-500">{{ __('Low Stock') }}</div>
+                    <div class="text-xs text-gray-500">{{ __('Stock Bajo') }}</div>
                 </div>
             </div>
         </x-filament::section>
@@ -252,7 +252,7 @@
                 </div>
                 <div>
                     <div class="text-xl font-bold text-red-600">{{ $inventory['out_of_stock'] }}</div>
-                    <div class="text-xs text-gray-500">{{ __('Out of Stock') }}</div>
+                    <div class="text-xs text-gray-500">{{ __('Agotados') }}</div>
                 </div>
             </div>
         </x-filament::section>
@@ -272,7 +272,7 @@
             data: {
                 labels: {!! json_encode($monthlyData['labels']) !!},
                 datasets: [{
-                    label: '{{ __("Revenue") }}',
+                    label: '{{ __("Ingresos") }}',
                     data: {!! json_encode($monthlyData['revenues']) !!},
                     backgroundColor: isDark ? 'rgba(16, 185, 129, 0.6)' : 'rgba(16, 185, 129, 0.75)',
                     borderColor: '#10b981',
@@ -281,7 +281,7 @@
                     yAxisID: 'y',
                     order: 2,
                 }, {
-                    label: '{{ __("Orders") }}',
+                    label: '{{ __("Pedidos") }}',
                     data: {!! json_encode($monthlyData['orders']) !!},
                     type: 'line',
                     borderColor: '#3b82f6',
@@ -309,8 +309,8 @@
                         padding: 12,
                         callbacks: {
                             label: ctx => {
-                                if (ctx.dataset.yAxisID === 'y') return '{{ __("Revenue") }}: $' + ctx.parsed.y.toLocaleString(undefined, {minimumFractionDigits:2});
-                                return '{{ __("Orders") }}: ' + ctx.parsed.y;
+                                if (ctx.dataset.yAxisID === 'y') return '{{ __("Ingresos") }}: $' + ctx.parsed.y.toLocaleString(undefined, {minimumFractionDigits:2});
+                                return '{{ __("Pedidos") }}: ' + ctx.parsed.y;
                             }
                         }
                     }

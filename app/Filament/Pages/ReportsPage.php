@@ -72,6 +72,23 @@ class ReportsPage extends Page
         // Livewire reactivity
     }
 
+    protected function resolveTranslatableName(mixed $value): string
+    {
+        if (! is_string($value)) {
+            return (string) $value;
+        }
+
+        $decoded = json_decode($value, true);
+
+        if (! is_array($decoded)) {
+            return $value;
+        }
+
+        $locale = app()->getLocale();
+
+        return $decoded[$locale] ?? $decoded['es'] ?? $decoded['en'] ?? reset($decoded) ?: $value;
+    }
+
     protected function getDateRange(): array
     {
         return [
@@ -120,7 +137,8 @@ class ReportsPage extends Page
             ->groupBy('products.id', 'products.name')
             ->orderByDesc('total_revenue')
             ->limit(10)
-            ->get();
+            ->get()
+            ->each(fn ($item) => $item->name = $this->resolveTranslatableName($item->name));
     }
 
     public function getTopCustomersReport(): \Illuminate\Support\Collection
@@ -159,7 +177,8 @@ class ReportsPage extends Page
             )
             ->groupBy('categories.id', 'categories.name')
             ->orderByDesc('total_revenue')
-            ->get();
+            ->get()
+            ->each(fn ($item) => $item->name = $this->resolveTranslatableName($item->name));
     }
 
     public function getPaymentMethodBreakdown(): \Illuminate\Support\Collection
