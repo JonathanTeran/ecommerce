@@ -86,10 +86,15 @@ class CeoDashboard extends Page
             ->whereDate('created_at', today())
             ->sum('total');
 
+        $yesterday = Order::where('payment_status', PaymentStatus::COMPLETED)
+            ->whereDate('created_at', today()->subDay())
+            ->sum('total');
+
         $growthPct = $lastMonth > 0 ? (($thisMonth - $lastMonth) / $lastMonth) * 100 : ($thisMonth > 0 ? 100 : 0);
 
         return [
             'today' => $today,
+            'yesterday' => $yesterday,
             'this_month' => $thisMonth,
             'last_month' => $lastMonth,
             'this_year' => $thisYear,
@@ -128,7 +133,6 @@ class CeoDashboard extends Page
 
         $totalCustomers = User::count();
         $newThisMonth = User::whereBetween('created_at', [$now->copy()->startOfMonth(), $now->copy()->endOfMonth()])->count();
-        $newLastMonth = User::whereBetween('created_at', [$now->copy()->subMonth()->startOfMonth(), $now->copy()->subMonth()->endOfMonth()])->count();
 
         $customersWithOrders = Order::distinct('user_id')->count('user_id');
         $conversionRate = $totalCustomers > 0 ? ($customersWithOrders / $totalCustomers) * 100 : 0;
@@ -144,7 +148,6 @@ class CeoDashboard extends Page
         return [
             'total' => $totalCustomers,
             'new_this_month' => $newThisMonth,
-            'new_last_month' => $newLastMonth,
             'conversion_rate' => round($conversionRate, 1),
             'repeat_rate' => round($repeatRate, 1),
         ];
@@ -176,9 +179,14 @@ class CeoDashboard extends Page
 
     public function getMonthlyRevenue(): array
     {
+        $driver = DB::getDriverName();
+        $monthExpr = $driver === 'sqlite'
+            ? "strftime('%Y-%m', created_at) as month"
+            : "DATE_FORMAT(created_at, '%Y-%m') as month";
+
         $data = Order::where('payment_status', PaymentStatus::COMPLETED)
             ->whereBetween('created_at', [now()->subMonths(11)->startOfMonth(), now()->endOfMonth()])
-            ->selectRaw("DATE_FORMAT(created_at, '%Y-%m') as month, SUM(total) as revenue, COUNT(*) as orders")
+            ->selectRaw("$monthExpr, SUM(total) as revenue, COUNT(*) as orders")
             ->groupBy('month')
             ->orderBy('month')
             ->get();
@@ -197,6 +205,34 @@ class CeoDashboard extends Page
         }
 
         $labels = array_map(fn ($m) => Carbon::createFromFormat('Y-m', $m)->translatedFormat('M Y'), $months);
+
+        return compact('labels', 'revenues', 'orders');
+    }
+
+    public function getDailyRevenue7Days(): array
+    {
+        $driver = DB::getDriverName();
+        $dateExpr = $driver === 'sqlite'
+            ? "strftime('%Y-%m-%d', created_at) as day"
+            : 'DATE(created_at) as day';
+
+        $data = Order::where('payment_status', PaymentStatus::COMPLETED)
+            ->whereBetween('created_at', [now()->subDays(6)->startOfDay(), now()->endOfDay()])
+            ->selectRaw("$dateExpr, SUM(total) as revenue, COUNT(*) as orders")
+            ->groupBy('day')
+            ->orderBy('day')
+            ->get();
+
+        $labels = [];
+        $revenues = [];
+        $orders = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $day = now()->subDays($i)->format('Y-m-d');
+            $labels[] = now()->subDays($i)->translatedFormat('D');
+            $found = $data->firstWhere('day', $day);
+            $revenues[] = $found ? round((float) $found->revenue, 2) : 0;
+            $orders[] = $found ? (int) $found->orders : 0;
+        }
 
         return compact('labels', 'revenues', 'orders');
     }
@@ -243,6 +279,58 @@ class CeoDashboard extends Page
         return compact('labels', 'values', 'colors');
     }
 
+    public function getCategoryRevenue(): array
+    {
+        $driver = DB::getDriverName();
+
+        $data = \App\Models\OrderItem::query()
+            ->join('orders', 'order_items.order_id', '=', 'orders.id')
+            ->join('products', 'order_items.product_id', '=', 'products.id')
+            ->join('categories', 'products.category_id', '=', 'categories.id')
+            ->whereNull('orders.deleted_at')
+            ->select(
+                'categories.name',
+                DB::raw('SUM(order_items.subtotal) as revenue')
+            )
+            ->groupBy('categories.id', 'categories.name')
+            ->orderByDesc('revenue')
+            ->limit(6)
+            ->get()
+            ->each(fn ($item) => $item->name = $this->resolveTranslatableName($item->name));
+
+        $colors = ['#6366f1', '#8b5cf6', '#a855f7', '#c084fc', '#d8b4fe', '#e9d5ff'];
+
+        return [
+            'labels' => $data->pluck('name')->toArray(),
+            'values' => $data->pluck('revenue')->map(fn ($v) => round((float) $v, 2))->toArray(),
+            'colors' => array_slice($colors, 0, $data->count()),
+        ];
+    }
+
+    public function getPaymentMethodBreakdown(): array
+    {
+        $data = Order::where('payment_status', PaymentStatus::COMPLETED)
+            ->selectRaw('COALESCE(payment_method, "otros") as method, COUNT(*) as count, SUM(total) as revenue')
+            ->groupBy('method')
+            ->orderByDesc('revenue')
+            ->get();
+
+        $methodLabels = [
+            'payphone' => 'Payphone',
+            'transfer' => 'Transferencia',
+            'cash_on_delivery' => 'Contra entrega',
+            'credit_card' => 'Tarjeta',
+            'otros' => 'Otros',
+        ];
+
+        return [
+            'labels' => $data->map(fn ($d) => $methodLabels[$d->method] ?? ucfirst($d->method))->toArray(),
+            'values' => $data->pluck('revenue')->map(fn ($v) => round((float) $v, 2))->toArray(),
+            'counts' => $data->pluck('count')->toArray(),
+            'colors' => ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4'],
+        ];
+    }
+
     public function getTopProductsData(): \Illuminate\Support\Collection
     {
         return \App\Models\OrderItem::query()
@@ -267,5 +355,35 @@ class CeoDashboard extends Page
             ->latest()
             ->limit(8)
             ->get();
+    }
+
+    public function getWeeklyComparison(): array
+    {
+        $thisWeekStart = now()->startOfWeek();
+        $lastWeekStart = now()->subWeek()->startOfWeek();
+        $lastWeekEnd = now()->subWeek()->endOfWeek();
+
+        $thisWeek = Order::where('payment_status', PaymentStatus::COMPLETED)
+            ->whereBetween('created_at', [$thisWeekStart, now()])
+            ->sum('total');
+
+        $lastWeek = Order::where('payment_status', PaymentStatus::COMPLETED)
+            ->whereBetween('created_at', [$lastWeekStart, $lastWeekEnd])
+            ->sum('total');
+
+        $thisWeekOrders = Order::whereBetween('created_at', [$thisWeekStart, now()])->count();
+        $lastWeekOrders = Order::whereBetween('created_at', [$lastWeekStart, $lastWeekEnd])->count();
+
+        $revenuePct = $lastWeek > 0 ? (($thisWeek - $lastWeek) / $lastWeek) * 100 : ($thisWeek > 0 ? 100 : 0);
+        $ordersPct = $lastWeekOrders > 0 ? (($thisWeekOrders - $lastWeekOrders) / $lastWeekOrders) * 100 : ($thisWeekOrders > 0 ? 100 : 0);
+
+        return [
+            'this_week_revenue' => $thisWeek,
+            'last_week_revenue' => $lastWeek,
+            'revenue_pct' => round($revenuePct, 1),
+            'this_week_orders' => $thisWeekOrders,
+            'last_week_orders' => $lastWeekOrders,
+            'orders_pct' => round($ordersPct, 1),
+        ];
     }
 }
