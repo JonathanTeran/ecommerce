@@ -2,12 +2,15 @@
 
 namespace App\Filament\Resources\ProductResource\Pages;
 
+use App\Filament\Concerns\HandlesTranslatableFields;
 use App\Filament\Resources\ProductResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 
 class EditProduct extends EditRecord
 {
+    use HandlesTranslatableFields;
+
     protected static string $resource = ProductResource::class;
 
     protected function getHeaderActions(): array
@@ -19,16 +22,8 @@ class EditProduct extends EditRecord
 
     protected function mutateFormDataBeforeFill(array $data): array
     {
-        $locale = app()->getLocale();
-        // List of fields that are translatable (from Product model)
-        $translatableFields = ['name', 'description', 'short_description', 'specifications', 'meta_title', 'meta_description'];
-
-        foreach ($translatableFields as $field) {
-            // If the field is an array (JSON), extract the current locale string
-            if (isset($data[$field]) && is_array($data[$field])) {
-                $data[$field] = $data[$field][$locale] ?? array_values($data[$field])[0] ?? '';
-            }
-        }
+        // Resolve translatable fields via trait
+        $data = $this->handleTranslatableFieldsBeforeFill($data);
 
         $customAttributes = [];
         $attributeValues = \App\Models\AttributeValue::where('product_id', $this->record->id)->get();
