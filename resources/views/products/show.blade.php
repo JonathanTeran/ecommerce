@@ -10,7 +10,7 @@
         <div class="container mx-auto px-4 py-8">
             {{-- Breadcrumbs --}}
             <nav class="flex flex-wrap mb-6 md:mb-8 text-sm text-gray-500">
-                <a href="{{ route('home') }}" class="hover:text-gray-900 dark:hover:text-white">{{ __('Home') }}</a>
+                <a href="{{ route('home') }}" class="hover:text-gray-900 dark:hover:text-white">{{ __('Inicio') }}</a>
                 <span class="mx-2">/</span>
                 <a href="{{ route('shop.index', ['category' => $product->category->slug]) }}"
                     class="hover:text-gray-900 dark:hover:text-white">{{ $product->category->name }}</a>
@@ -91,12 +91,12 @@
                         @if ($product->is_in_stock)
                             <span
                                 class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
-                                {{ __('In Stock') }}
+                                {{ __('En Stock') }}
                             </span>
                         @else
                             <span
                                 class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400">
-                                {{ __('Out of Stock') }}
+                                {{ __('Agotado') }}
                             </span>
                         @endif
                     </div>
@@ -108,7 +108,7 @@
                     {{-- Specifications --}}
                     @if (($tenantSettings?->getProductPageConfig()['show_specifications'] ?? true) && $product->specifications && count($product->specifications) > 0)
                         <div class="mb-8 p-4 bg-gray-50 dark:bg-zinc-900 rounded-xl">
-                            <h3 class="font-semibold text-gray-900 dark:text-white mb-3">{{ __('Specifications') }}</h3>
+                            <h3 class="font-semibold text-gray-900 dark:text-white mb-3">{{ __('Especificaciones') }}</h3>
                             <div class="grid grid-cols-1 gap-y-2">
                                 @foreach ($product->specifications as $key => $value)
                                     <div
@@ -126,7 +126,7 @@
                     <div class="border-t border-gray-200 dark:border-zinc-800 pt-8 hidden md:block"
                         x-data="{ quantity: 1 }">
                         <div class="flex items-center gap-6 mb-6">
-                            <label class="font-medium text-gray-900 dark:text-white">{{ __('Quantity') }}</label>
+                            <label class="font-medium text-gray-900 dark:text-white">{{ __('Cantidad') }}</label>
                             <div
                                 class="flex items-center border border-gray-300 dark:border-zinc-700 rounded-lg bg-white dark:bg-zinc-900">
                                 <button @click="quantity > 1 ? quantity-- : null"
@@ -142,7 +142,7 @@
                             :disabled="!{{ $product->is_in_stock ? 'true' : 'false' }} || $store.cart.loading"
                             class="w-full bg-indigo-600 dark:bg-indigo-500 text-white font-bold py-4 rounded-full hover:bg-indigo-700 dark:hover:bg-indigo-600 transition disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-indigo-200 dark:shadow-none">
                             <span x-show="!$store.cart.loading">
-                                {{ $product->is_in_stock ? __('Add to Cart') : __('Out of Stock') }}
+                                {{ $product->is_in_stock ? __('Agregar al Carrito') : __('Agotado') }}
                             </span>
                             <span x-show="$store.cart.loading" class="flex items-center justify-center gap-2">
                                 <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg"
@@ -153,7 +153,7 @@
                                         d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
                                     </path>
                                 </svg>
-                                {{ __('Adding...') }}
+                                {{ __('Agregando...') }}
                             </span>
                         </button>
                     </div>
@@ -161,13 +161,13 @@
                     {{-- Additional Details --}}
                     <div class="mt-8 space-y-3 text-sm text-gray-500 dark:text-gray-400">
                         <div class="flex items-center gap-2">
-                            <span class="font-medium text-gray-900 dark:text-white w-20">{{ __('SKU') }}:</span>
+                            <span class="font-medium text-gray-900 dark:text-white w-20">{{ __('Código') }}:</span>
                             <span
                                 class="font-mono bg-gray-100 dark:bg-zinc-800 px-2 py-1 rounded text-xs">{{ $product->sku }}</span>
                         </div>
                         @if ($product->category)
                             <div class="flex items-center gap-2">
-                                <span class="font-medium text-gray-900 dark:text-white w-20">{{ __('Category') }}:</span>
+                                <span class="font-medium text-gray-900 dark:text-white w-20">{{ __('Categoría') }}:</span>
                                 <a href="{{ route('shop.index', ['category' => $product->category->slug]) }}"
                                     class="text-indigo-600 dark:text-indigo-400 hover:underline">{{ $product->category->name }}</a>
                             </div>
@@ -185,7 +185,7 @@
             @if (($tenantSettings?->getProductPageConfig()['show_related_products'] ?? true) && $relatedProducts->count() > 0)
                 <div class="mt-20">
                     <div class="flex items-center justify-between mb-8">
-                        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">{{ __('You may also like') }}</h2>
+                        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">{{ __('También te puede interesar') }}</h2>
                         <a href="{{ route('shop.index', ['category' => $product->category?->slug]) }}" class="text-sm font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 flex items-center gap-1">
                             {{ __('Ver todos') }}
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
@@ -268,7 +268,7 @@
             <button @click="$store.cart.add({{ $product->id }}, 1)"
                 :disabled="!{{ $product->is_in_stock ? 'true' : 'false' }} || $store.cart.loading"
                 class="px-6 py-3 bg-indigo-600 dark:bg-indigo-500 text-white font-bold rounded-lg hover:bg-indigo-700 dark:hover:bg-indigo-600 transition disabled:opacity-50 disabled:cursor-not-allowed">
-                {{ $product->is_in_stock ? __('Add to Cart') : __('Out of Stock') }}
+                {{ $product->is_in_stock ? __('Agregar al Carrito') : __('Agotado') }}
             </button>
         </div>
     </div>

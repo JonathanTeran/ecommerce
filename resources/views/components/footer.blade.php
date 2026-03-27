@@ -27,7 +27,7 @@
                     @if(!empty($brandDescription))
                         {{ $brandDescription }}
                     @else
-                        {{ __('Elevating your shopping experience with premium products and exceptional service. Quality meetings luxury.') }}
+                        {{ __('Elevando tu experiencia de compra con productos premium y servicio excepcional. Donde la calidad encuentra el lujo.') }}
                     @endif
                 </p>
                 <div class="flex gap-4">
@@ -60,22 +60,22 @@
             @if($useDefaultColumns)
                 <!-- Default Shop Column -->
                 <div>
-                    <h3 class="font-heading font-bold text-slate-900 dark:text-white mb-6">{{ __('Shop') }}</h3>
+                    <h3 class="font-heading font-bold text-slate-900 dark:text-white mb-6">{{ __('Tienda') }}</h3>
                     <ul class="space-y-4">
-                        <li><a href="{{ route('shop.index') }}?sort=latest" class="text-slate-600 dark:text-slate-400 hover:text-primary-500 transition-colors text-sm">{{ __('New Arrivals') }}</a></li>
-                        <li><a href="{{ route('shop.index') }}?sort=popular" class="text-slate-600 dark:text-slate-400 hover:text-primary-500 transition-colors text-sm">{{ __('Best Sellers') }}</a></li>
-                        <li><a href="{{ route('shop.index') }}" class="text-slate-600 dark:text-slate-400 hover:text-primary-500 transition-colors text-sm">{{ __('All Products') }}</a></li>
+                        <li><a href="{{ route('shop.index') }}?sort=latest" class="text-slate-600 dark:text-slate-400 hover:text-primary-500 transition-colors text-sm">{{ __('Nuevos Lanzamientos') }}</a></li>
+                        <li><a href="{{ route('shop.index') }}?sort=popular" class="text-slate-600 dark:text-slate-400 hover:text-primary-500 transition-colors text-sm">{{ __('Más Vendidos') }}</a></li>
+                        <li><a href="{{ route('shop.index') }}" class="text-slate-600 dark:text-slate-400 hover:text-primary-500 transition-colors text-sm">{{ __('Todos los Productos') }}</a></li>
                     </ul>
                 </div>
 
                 <!-- Default Support Column -->
                 <div>
-                    <h3 class="font-heading font-bold text-slate-900 dark:text-white mb-6">{{ __('Support') }}</h3>
+                    <h3 class="font-heading font-bold text-slate-900 dark:text-white mb-6">{{ __('Soporte') }}</h3>
                     <ul class="space-y-4">
-                        <li><a href="{{ route('about') }}" class="text-slate-600 dark:text-slate-400 hover:text-primary-500 transition-colors text-sm">{{ __('About Us') }}</a></li>
-                        <li><a href="{{ route('legal.terms') }}" class="text-slate-600 dark:text-slate-400 hover:text-primary-500 transition-colors text-sm">{{ __('Terminos de Servicio SaaS') }}</a></li>
-                        <li><a href="{{ route('legal.privacy') }}" class="text-slate-600 dark:text-slate-400 hover:text-primary-500 transition-colors text-sm">{{ __('Politica de Privacidad') }}</a></li>
-                        <li><a href="{{ route('legal.acceptable-use') }}" class="text-slate-600 dark:text-slate-400 hover:text-primary-500 transition-colors text-sm">{{ __('Politica de Uso Aceptable') }}</a></li>
+                        <li><a href="{{ route('about') }}" class="text-slate-600 dark:text-slate-400 hover:text-primary-500 transition-colors text-sm">{{ __('Nosotros') }}</a></li>
+                        <li><a href="{{ route('legal.terms') }}" class="text-slate-600 dark:text-slate-400 hover:text-primary-500 transition-colors text-sm">{{ __('Términos de Servicio') }}</a></li>
+                        <li><a href="{{ route('legal.privacy') }}" class="text-slate-600 dark:text-slate-400 hover:text-primary-500 transition-colors text-sm">{{ __('Política de Privacidad') }}</a></li>
+                        <li><a href="{{ route('legal.acceptable-use') }}" class="text-slate-600 dark:text-slate-400 hover:text-primary-500 transition-colors text-sm">{{ __('Política de Uso Aceptable') }}</a></li>
                     </ul>
                 </div>
             @else
@@ -94,9 +94,9 @@
             @if($showNewsletter)
             <!-- Newsletter -->
             <div x-data="{ email: '', loading: false, success: '', error: '' }">
-                <h3 class="font-heading font-bold text-slate-900 dark:text-white mb-6">{{ __('Stay Updated') }}</h3>
+                <h3 class="font-heading font-bold text-slate-900 dark:text-white mb-6">{{ __('Mantente Actualizado') }}</h3>
                 <p class="text-slate-600 dark:text-slate-400 text-sm mb-4">
-                    {{ __('Subscribe to our newsletter for exclusive offers and updates.') }}</p>
+                    {{ __('Suscríbete a nuestro boletín para ofertas exclusivas y novedades.') }}</p>
                 <form class="flex gap-2" @submit.prevent="
                     loading = true; success = ''; error = '';
                     fetch('/api/newsletter/subscribe', {
@@ -112,7 +112,7 @@
                     .catch(() => { error = 'Error de conexion.'; })
                     .finally(() => { loading = false; })
                 ">
-                    <input type="email" x-model="email" required placeholder="{{ __('Enter your email') }}"
+                    <input type="email" x-model="email" required placeholder="{{ __('Tu correo electrónico') }}"
                         class="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-lg text-sm px-4 py-3 focus:ring-2 focus:ring-primary-500 dark:text-white placeholder-slate-400">
                     <button type="submit" :disabled="loading"
                         class="bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-4 py-3 rounded-lg hover:opacity-90 transition-opacity">
@@ -140,7 +140,7 @@
                     {{ $copyrightText }}
                 @else
                     &copy; {{ date('Y') }} {{ $tenantSettings?->site_name ?? config('app.name') }}.
-                    {{ __('All rights reserved.') }}
+                    {{ __('Todos los derechos reservados.') }}
                 @endif
             </p>
             @if($footerConfig['show_payment_icons'] ?? false)

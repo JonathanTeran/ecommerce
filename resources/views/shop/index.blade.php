@@ -45,7 +45,7 @@
 
                                         <div x-show="slide.link" class="pt-4">
                                             <a :href="slide.link"
-                                                x-text="slide.button_text || '{{ __('Shop Now') }}'"
+                                                x-text="slide.button_text || '{{ __('Comprar Ahora') }}'"
                                                 class="inline-block bg-white text-black px-6 py-2.5 sm:px-8 sm:py-3 rounded-full text-sm sm:text-base font-bold hover:bg-gray-100 hover:scale-105 transition transform shadow-xl">
                                             </a>
                                         </div>
@@ -141,6 +141,38 @@
 
                     @endif
 
+                    {{-- Price Range Filter --}}
+                    <div x-data="{ expanded: {{ (request('min_price') || request('max_price')) ? 'true' : 'false' }}, minPrice: '{{ request('min_price', '') }}', maxPrice: '{{ request('max_price', '') }}' }" class="border-b border-gray-200 dark:border-zinc-800 pb-6">
+                        <button @click="expanded = !expanded"
+                            class="flex items-center justify-between w-full py-2 text-left group">
+                            <h3 class="font-bold text-lg text-gray-900 dark:text-white">{{ __('Precio') }}</h3>
+                            <svg class="w-5 h-5 text-gray-500 transform transition-transform duration-200"
+                                :class="{ 'rotate-180': expanded }" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div x-show="expanded" x-collapse>
+                            <form method="GET" action="{{ route('shop.index') }}" class="mt-4 space-y-3">
+                                @foreach(request()->except(['min_price', 'max_price', 'page']) as $key => $value)
+                                    <input type="hidden" name="{{ $key }}" value="{{ $value }}">
+                                @endforeach
+                                <div class="flex items-center gap-2">
+                                    <input type="number" name="min_price" x-model="minPrice" placeholder="{{ __('Mín') }}" min="0" step="0.01"
+                                        class="w-full text-sm border-gray-300 dark:border-zinc-700 rounded-lg bg-white dark:bg-zinc-800 dark:text-white px-3 py-2">
+                                    <span class="text-gray-400">—</span>
+                                    <input type="number" name="max_price" x-model="maxPrice" placeholder="{{ __('Máx') }}" min="0" step="0.01"
+                                        class="w-full text-sm border-gray-300 dark:border-zinc-700 rounded-lg bg-white dark:bg-zinc-800 dark:text-white px-3 py-2">
+                                </div>
+                                <button type="submit"
+                                    class="w-full text-sm font-medium bg-indigo-600 text-white rounded-lg px-4 py-2 hover:bg-indigo-700 transition">
+                                    {{ __('Aplicar') }}
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
                     {{-- Brands Filter --}}
                     @if($showBrandFilter)
                     <div x-data="{ expanded: {{ request('brand') ? 'true' : 'false' }} }" class="border-b border-gray-200 dark:border-zinc-800 pb-6">
@@ -190,22 +222,22 @@
                 <div class="w-full {{ $showSidebar ? 'lg:w-3/4' : '' }}">
                     {{-- Header / Sort --}}
                     <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6">
-                        <h1 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">{{ __('Shop') }}</h1>
+                        <h1 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">{{ __('Tienda') }}</h1>
                         <div class="flex items-center gap-2">
-                            <span class="text-sm text-gray-500 hidden sm:inline">{{ __('Sort by:') }}</span>
+                            <span class="text-sm text-gray-500 hidden sm:inline">{{ __('Ordenar por:') }}</span>
                             <select onchange="window.location.href=this.value"
                                 class="text-sm border-gray-300 rounded-md dark:bg-zinc-800 dark:border-zinc-700 dark:text-white">
                                 <option
                                     value="{{ route('shop.index', array_merge(request()->query(), ['sort' => 'latest'])) }}"
-                                    {{ request('sort') == 'latest' ? 'selected' : '' }}>{{ __('Latest') }}</option>
+                                    {{ request('sort') == 'latest' ? 'selected' : '' }}>{{ __('Más recientes') }}</option>
                                 <option
                                     value="{{ route('shop.index', array_merge(request()->query(), ['sort' => 'price_asc'])) }}"
                                     {{ request('sort') == 'price_asc' ? 'selected' : '' }}>
-                                    {{ __('Price: Low to High') }}</option>
+                                    {{ __('Precio: Menor a Mayor') }}</option>
                                 <option
                                     value="{{ route('shop.index', array_merge(request()->query(), ['sort' => 'price_desc'])) }}"
                                     {{ request('sort') == 'price_desc' ? 'selected' : '' }}>
-                                    {{ __('Price: High to Low') }}</option>
+                                    {{ __('Precio: Mayor a Menor') }}</option>
                             </select>
                         </div>
                     </div>
@@ -276,9 +308,9 @@
                             </div>
                         @empty
                             <div class="col-span-full text-center py-12">
-                                <p class="text-gray-500">{{ __('No products found.') }}</p>
+                                <p class="text-gray-500">{{ __('No se encontraron productos.') }}</p>
                                 <a href="{{ route('shop.index') }}"
-                                    class="text-indigo-600 hover:underline mt-2 inline-block">{{ __('Clear filters') }}</a>
+                                    class="text-indigo-600 hover:underline mt-2 inline-block">{{ __('Limpiar filtros') }}</a>
                             </div>
                         @endforelse
                     </div>
