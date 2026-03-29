@@ -34,6 +34,7 @@ class Tenant extends Model
         'favicon',
         'theme_color',
         'theme_template',
+        'store_template_id',
         'country',
         'currency',
         'language',
@@ -73,6 +74,11 @@ class Tenant extends Model
     public function users(): HasMany
     {
         return $this->hasMany(User::class);
+    }
+
+    public function storeTemplate(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(StoreTemplate::class);
     }
 
     public function subscriptions(): HasMany

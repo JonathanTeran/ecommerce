@@ -25,9 +25,10 @@ class ManageGeneralSettings extends Page
         $settings = GeneralSetting::forCurrentTenantOrCreate();
         $data = $settings->toArray();
 
-        // Load theme_template from Tenant
+        // Load tenant-level theme fields
         $tenant = app()->bound('current_tenant') ? app('current_tenant') : null;
         $data['theme_template'] = $tenant?->theme_template?->value ?? 'default';
+        $data['store_template_id'] = $tenant?->store_template_id;
 
         $this->form->fill($data);
     }
@@ -81,12 +82,24 @@ class ManageGeneralSettings extends Page
                     ->description('Selecciona el estilo visual de tu tienda. Cada plantilla tiene un layout diferente optimizado para tu tipo de negocio.')
                     ->schema([
                         Forms\Components\Radio::make('theme_template')
-                            ->label('')
+                            ->label('Estilo Base')
                             ->options(collect(\App\Enums\ThemeTemplate::cases())->mapWithKeys(fn ($t) => [$t->value => $t->label()]))
                             ->descriptions(collect(\App\Enums\ThemeTemplate::cases())->mapWithKeys(fn ($t) => [$t->value => $t->description()]))
                             ->default('default')
                             ->columns(2)
                             ->live(),
+
+                        Forms\Components\Select::make('store_template_id')
+                            ->label('Plantilla Predefinida')
+                            ->helperText('Las plantillas predefinidas son administradas por el equipo de la plataforma. Sobreescriben el estilo base si se seleccionan.')
+                            ->options(fn () => \App\Models\StoreTemplate::active()
+                                ->orderBy('sort_order')
+                                ->get()
+                                ->mapWithKeys(fn ($t) => [$t->id => $t->name.' — '.$t->category_label])
+                            )
+                            ->placeholder('Ninguna (usar estilo base)')
+                            ->searchable()
+                            ->nullable(),
                     ]),
 
                 Forms\Components\Section::make('Configuración Fiscal y Moneda')
@@ -228,16 +241,20 @@ class ManageGeneralSettings extends Page
 
         $settings = GeneralSetting::forCurrentTenantOrCreate();
 
-        // Extract theme_template and apply to Tenant, not GeneralSetting
+        // Extract tenant-level fields
         $themeTemplate = $state['theme_template'] ?? null;
-        unset($state['theme_template']);
+        $storeTemplateId = $state['store_template_id'] ?? null;
+        unset($state['theme_template'], $state['store_template_id']);
 
         $settings->update($state);
 
-        // Sync theme_template to Tenant model
-        if ($themeTemplate) {
-            $tenant = app()->bound('current_tenant') ? app('current_tenant') : null;
-            $tenant?->update(['theme_template' => $themeTemplate]);
+        // Sync theme fields to Tenant model
+        $tenant = app()->bound('current_tenant') ? app('current_tenant') : null;
+        if ($tenant) {
+            $tenant->update([
+                'theme_template' => $themeTemplate ?? 'default',
+                'store_template_id' => $storeTemplateId,
+            ]);
         }
 
         Notification::make()
