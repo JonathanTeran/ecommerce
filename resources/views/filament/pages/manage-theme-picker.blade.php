@@ -70,42 +70,55 @@
                         <img src="{{ $template['preview_image'] }}" alt="{{ $template['name'] }}" class="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500">
                     @else
                         @php
-                            $bg = $gradientColors[0] ?? '#6366f1';
-                            $surface = $gradientColors[1] ?? '#818cf8';
-                            $accent = $gradientColors[2] ?? $gradientColors[0] ?? '#6366f1';
-                            $text = $gradientColors[3] ?? '#ffffff';
+                            $allSwatches = $template['swatches'] ?? [];
+                            $bg = $allSwatches[0] ?? '#6366f1';
+                            $surface = $allSwatches[1] ?? '#818cf8';
+                            $textC = $allSwatches[2] ?? '#ffffff';
+                            $accent = $allSwatches[3] ?? $allSwatches[0] ?? '#6366f1';
                         @endphp
-                        {{-- Mini storefront mockup using theme colors --}}
-                        <div class="w-full h-full relative overflow-hidden" style="background: {{ $bg }};">
-                            {{-- Fake navbar --}}
-                            <div class="flex items-center justify-between px-4 py-2" style="background: {{ $surface }};">
-                                <div class="flex items-center gap-2">
-                                    <div class="w-4 h-4 rounded" style="background: {{ $accent }};"></div>
-                                    <div class="w-12 h-1.5 rounded-full" style="background: {{ $text }}; opacity: 0.6;"></div>
-                                </div>
-                                <div class="flex gap-3">
-                                    <div class="w-6 h-1.5 rounded-full" style="background: {{ $text }}; opacity: 0.3;"></div>
-                                    <div class="w-6 h-1.5 rounded-full" style="background: {{ $text }}; opacity: 0.3;"></div>
-                                    <div class="w-6 h-1.5 rounded-full" style="background: {{ $text }}; opacity: 0.3;"></div>
-                                </div>
+                        {{-- Browser-style mockup --}}
+                        <div class="w-full h-full relative flex flex-col" style="background: #f1f5f9;">
+                            {{-- Browser chrome --}}
+                            <div class="flex items-center gap-1.5 px-3 py-1.5" style="background: #e2e8f0;">
+                                <div class="w-2 h-2 rounded-full" style="background: #ef4444;"></div>
+                                <div class="w-2 h-2 rounded-full" style="background: #f59e0b;"></div>
+                                <div class="w-2 h-2 rounded-full" style="background: #22c55e;"></div>
+                                <div class="flex-1 mx-2 h-3.5 rounded-full" style="background: #ffffff; border: 1px solid #cbd5e1;"></div>
                             </div>
-                            {{-- Fake hero --}}
-                            <div class="px-4 pt-6 pb-4">
-                                <div class="w-24 h-2 rounded-full mb-2" style="background: {{ $text }}; opacity: 0.8;"></div>
-                                <div class="w-36 h-3 rounded-full mb-1" style="background: {{ $text }}; opacity: 0.5;"></div>
-                                <div class="w-16 h-5 rounded-md mt-3" style="background: {{ $accent }};"></div>
-                            </div>
-                            {{-- Fake product cards --}}
-                            <div class="px-4 grid grid-cols-4 gap-2">
-                                @for($i = 0; $i < 4; $i++)
-                                    <div class="rounded-md overflow-hidden" style="background: {{ $surface }};">
-                                        <div class="aspect-square" style="background: {{ $bg }}; opacity: 0.5;"></div>
-                                        <div class="p-1.5">
-                                            <div class="w-full h-1 rounded-full mb-1" style="background: {{ $text }}; opacity: 0.3;"></div>
-                                            <div class="w-8 h-1 rounded-full" style="background: {{ $accent }}; opacity: 0.7;"></div>
-                                        </div>
+                            {{-- Site content --}}
+                            <div class="flex-1 overflow-hidden" style="background: {{ $bg }};">
+                                {{-- Navbar --}}
+                                <div class="flex items-center justify-between px-3 py-1.5" style="background: {{ $surface }};">
+                                    <div class="flex items-center gap-1.5">
+                                        <div class="w-3 h-3 rounded-sm" style="background: {{ $accent }};"></div>
+                                        <div class="w-10 h-1.5 rounded-full" style="background: {{ $textC }};"></div>
                                     </div>
-                                @endfor
+                                    <div class="flex gap-2">
+                                        <div class="w-5 h-1 rounded-full" style="background: {{ $textC }}; opacity: 0.5;"></div>
+                                        <div class="w-5 h-1 rounded-full" style="background: {{ $textC }}; opacity: 0.5;"></div>
+                                        <div class="w-5 h-1 rounded-full" style="background: {{ $textC }}; opacity: 0.5;"></div>
+                                    </div>
+                                </div>
+                                {{-- Hero --}}
+                                <div class="px-3 pt-3 pb-2">
+                                    <div class="w-20 h-1.5 rounded-full mb-1" style="background: {{ $textC }};"></div>
+                                    <div class="w-28 h-2.5 rounded-full mb-1" style="background: {{ $textC }}; opacity: 0.7;"></div>
+                                    <div class="w-14 h-4 rounded mt-2 flex items-center justify-center" style="background: {{ $accent }};">
+                                        <div class="w-8 h-1 rounded-full" style="background: {{ $bg }};"></div>
+                                    </div>
+                                </div>
+                                {{-- Products --}}
+                                <div class="px-3 grid grid-cols-4 gap-1.5">
+                                    @for($i = 0; $i < 4; $i++)
+                                        <div class="rounded overflow-hidden" style="background: {{ $surface }};">
+                                            <div class="h-8" style="background: linear-gradient(135deg, {{ $surface }}, {{ $bg }});"></div>
+                                            <div class="p-1">
+                                                <div class="w-full h-1 rounded-full mb-0.5" style="background: {{ $textC }}; opacity: 0.4;"></div>
+                                                <div class="w-6 h-1 rounded-full" style="background: {{ $accent }};"></div>
+                                            </div>
+                                        </div>
+                                    @endfor
+                                </div>
                             </div>
                         </div>
                     @endif
