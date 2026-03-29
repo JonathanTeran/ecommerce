@@ -4,7 +4,7 @@
 
         <div class="mt-4 flex justify-end">
             <x-filament::button type="submit">
-                Save Changes
+                Guardar Cambios
             </x-filament::button>
         </div>
     </form>

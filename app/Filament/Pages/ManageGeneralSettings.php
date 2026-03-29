@@ -23,8 +23,13 @@ class ManageGeneralSettings extends Page
     public function mount(): void
     {
         $settings = GeneralSetting::forCurrentTenantOrCreate();
+        $data = $settings->toArray();
 
-        $this->form->fill($settings->toArray());
+        // Load theme_template from Tenant
+        $tenant = app()->bound('current_tenant') ? app('current_tenant') : null;
+        $data['theme_template'] = $tenant?->theme_template?->value ?? 'default';
+
+        $this->form->fill($data);
     }
 
     public function form(Form $form): Form
@@ -51,13 +56,13 @@ class ManageGeneralSettings extends Page
                             ->label('Logo del Sistema')
                             ->image()
                             ->disk('public')
-                            ->directory(fn () => 'tenant-' . (app()->bound('current_tenant') ? app('current_tenant')->id : 'shared') . '/settings')
+                            ->directory(fn () => 'tenant-'.(app()->bound('current_tenant') ? app('current_tenant')->id : 'shared').'/settings')
                             ->visibility('public'),
                         Forms\Components\FileUpload::make('site_favicon')
                             ->label('Favicon')
                             ->image()
                             ->disk('public')
-                            ->directory(fn () => 'tenant-' . (app()->bound('current_tenant') ? app('current_tenant')->id : 'shared') . '/settings')
+                            ->directory(fn () => 'tenant-'.(app()->bound('current_tenant') ? app('current_tenant')->id : 'shared').'/settings')
                             ->visibility('public'),
                         Forms\Components\Select::make('theme_color')
                             ->label('Color del Tema')
@@ -71,6 +76,18 @@ class ManageGeneralSettings extends Page
                             ])
                             ->required(),
                     ])->columns(3),
+
+                Forms\Components\Section::make('Plantilla de la Tienda')
+                    ->description('Selecciona el estilo visual de tu tienda. Cada plantilla tiene un layout diferente optimizado para tu tipo de negocio.')
+                    ->schema([
+                        Forms\Components\Radio::make('theme_template')
+                            ->label('')
+                            ->options(collect(\App\Enums\ThemeTemplate::cases())->mapWithKeys(fn ($t) => [$t->value => $t->label()]))
+                            ->descriptions(collect(\App\Enums\ThemeTemplate::cases())->mapWithKeys(fn ($t) => [$t->value => $t->description()]))
+                            ->default('default')
+                            ->columns(2)
+                            ->live(),
+                    ]),
 
                 Forms\Components\Section::make('Configuración Fiscal y Moneda')
                     ->schema([
@@ -207,14 +224,25 @@ class ManageGeneralSettings extends Page
 
     public function create(): void
     {
+        $state = $this->form->getState();
+
         $settings = GeneralSetting::forCurrentTenantOrCreate();
-        $settings->update($this->form->getState());
+
+        // Extract theme_template and apply to Tenant, not GeneralSetting
+        $themeTemplate = $state['theme_template'] ?? null;
+        unset($state['theme_template']);
+
+        $settings->update($state);
+
+        // Sync theme_template to Tenant model
+        if ($themeTemplate) {
+            $tenant = app()->bound('current_tenant') ? app('current_tenant') : null;
+            $tenant?->update(['theme_template' => $themeTemplate]);
+        }
 
         Notification::make()
             ->title('Ajustes guardados exitosamente')
             ->success()
             ->send();
-
-        // Ideally we would redirect or reload to apply changes, but for now simple notification.
     }
 }
