@@ -59,15 +59,15 @@
                 x-transition:enter-start="opacity-0 scale-95"
                 x-transition:enter-end="opacity-100 scale-100"
                 wire:click="{{ $template['type'] === 'theme' ? "selectTheme('{$template['key']}')" : "selectStoreTemplate({$template['key']})" }}"
-                class="relative group cursor-pointer rounded-2xl border-2 overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-xl
+                class="relative group cursor-pointer rounded-2xl border-2 overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-xl flex flex-col
                     {{ $isSelected
                         ? 'border-primary-500 ring-2 ring-primary-500/20 shadow-lg shadow-primary-500/10'
                         : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600' }}"
             >
                 {{-- Preview Image / Gradient --}}
-                <div class="relative h-44 overflow-hidden">
+                <div class="relative h-44 shrink-0 overflow-hidden">
                     @if($template['preview_image'] ?? null)
-                        <img src="{{ $template['preview_image'] }}" alt="{{ $template['name'] }}" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500">
+                        <img src="{{ $template['preview_image'] }}" alt="{{ $template['name'] }}" class="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500">
                     @else
                         @php
                             $bg = $gradientColors[0] ?? '#6366f1';

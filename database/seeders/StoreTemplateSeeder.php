@@ -15,6 +15,7 @@ class StoreTemplateSeeder extends Seeder
                 'slug' => 'anton',
                 'description' => 'Plantilla moderna y elegante para tiendas de moda, ropa y accesorios. Tipografia Poppins, animaciones suaves, mega menu con imagenes y sliders de productos destacados.',
                 'category' => 'fashion',
+                'preview_image' => 'templates/previews/anton-preview.jpg',
                 'assets_path' => 'templates/anton',
                 'css_file' => 'templates/anton/css/style.css',
                 'color_scheme' => [
@@ -44,6 +45,7 @@ class StoreTemplateSeeder extends Seeder
                 'slug' => 'jovenca',
                 'description' => 'Plantilla premium para joyerias, relojerias y tiendas de accesorios de lujo. Diseno sofisticado con animaciones elegantes, sidebar de busqueda y galeria de productos con zoom.',
                 'category' => 'jewelry',
+                'preview_image' => 'templates/previews/jovenca-preview.jpg',
                 'assets_path' => 'templates/jovenca',
                 'css_file' => 'templates/jovenca/css/style.css',
                 'color_scheme' => [
@@ -73,6 +75,7 @@ class StoreTemplateSeeder extends Seeder
                 'slug' => 'radios',
                 'description' => 'Plantilla completa para tiendas de electronica, tecnologia y gadgets. Incluye mega menu por categorias, comparador de productos, barra de flash deals con countdown y seccion de marcas.',
                 'category' => 'electronics',
+                'preview_image' => 'templates/previews/radios-preview.jpg',
                 'assets_path' => 'templates/radios',
                 'css_file' => 'templates/radios/css/main.css',
                 'color_scheme' => [
