@@ -332,6 +332,17 @@ class OrderInfolist
                 ->columns(3)
                 ->collapsible()
                 ->collapsed(fn ($record) => ! $record->tracking_number),
+
+            // Order Timeline
+            Infolists\Components\Section::make('Cronología del Pedido')
+                ->icon('heroicon-o-clock')
+                ->schema([
+                    Infolists\Components\ViewEntry::make('statusHistory')
+                        ->label('')
+                        ->view('filament.infolists.entries.order-timeline'),
+                ])
+                ->columnSpanFull()
+                ->collapsible(),
         ];
     }
 }

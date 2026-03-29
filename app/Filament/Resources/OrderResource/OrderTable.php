@@ -25,10 +25,18 @@ class OrderTable
                     ->searchable()
                     ->sortable()
                     ->visible(fn (): bool => auth()->user()?->isSuperAdmin() ?? false),
+                Tables\Columns\TextColumn::make('display_number')
+                    ->label('N°')
+                    ->state(fn (Order $record): string => $record->display_number)
+                    ->badge()
+                    ->color('primary')
+                    ->sortable(query: fn ($query, string $direction) => $query->orderBy('internal_number', $direction)),
                 Tables\Columns\TextColumn::make('order_number')
-                    ->label('Número de Pedido')
+                    ->label('Código Tracking')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->copyable()
+                    ->toggleable(isToggledHiddenByDefault: false),
                 Tables\Columns\TextColumn::make('user.name')
                     ->label('Cliente')
                     ->searchable()

@@ -25,6 +25,7 @@ class Order extends Model
     protected $fillable = [
         'user_id',
         'order_number',
+        'internal_number',
         'status',
         'payment_status',
         'payment_method',
@@ -90,6 +91,13 @@ class Order extends Model
             if (empty($order->order_number)) {
                 $order->order_number = static::generateOrderNumber();
             }
+
+            // Auto-assign sequential internal number per tenant
+            if (empty($order->internal_number) && $order->tenant_id) {
+                $order->internal_number = static::withoutGlobalScopes()
+                    ->where('tenant_id', $order->tenant_id)
+                    ->max('internal_number') + 1;
+            }
         });
 
         static::saving(function ($order) {
@@ -125,6 +133,18 @@ class Order extends Model
                 $order->total = $subtotal - $discount + $taxAmount + $shipping + $surcharge;
             }
         });
+    }
+
+    /**
+     * Formatted internal number for display (e.g. #0001)
+     */
+    public function getDisplayNumberAttribute(): string
+    {
+        if ($this->internal_number) {
+            return '#'.str_pad($this->internal_number, 4, '0', STR_PAD_LEFT);
+        }
+
+        return $this->order_number;
     }
 
     public static function generateOrderNumber(): string
