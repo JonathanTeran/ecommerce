@@ -88,7 +88,7 @@ class StorefrontPreviewController extends Controller
             $categories = Category::whereNull('parent_id')
                 ->where('is_active', true)
                 ->withCount('products')
-                ->orderBy('sort_order')
+                ->orderBy('name')
                 ->take(8)
                 ->get();
         }
