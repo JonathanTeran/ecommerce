@@ -49,7 +49,7 @@ it('creates a demo tenant with 7 homepage sections', function () {
         ->where('tenant_id', $tenant->id)
         ->get();
 
-    expect($sections)->toHaveCount(7);
+    expect($sections)->toHaveCount(10);
 });
 
 it('does not create homepage sections for non-demo tenants', function () {
@@ -74,7 +74,7 @@ it('does not create homepage sections for non-demo tenants', function () {
     expect($sections)->toHaveCount(0);
 });
 
-it('creates all 7 section types for demo tenant', function () {
+it('creates all section types for demo tenant', function () {
     $plan = createDemoPlan();
 
     $tenant = app(TenantProvisioningService::class)->provision([
@@ -115,7 +115,7 @@ it('sets correct sort order on demo sections', function () {
         ->orderBy('sort_order')
         ->get();
 
-    expect($sections->pluck('sort_order')->toArray())->toBe([1, 2, 3, 4, 5, 6, 7]);
+    expect($sections->pluck('sort_order')->toArray())->toBe([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
     expect($sections->every(fn ($s) => $s->is_active))->toBeTrue();
 });
 

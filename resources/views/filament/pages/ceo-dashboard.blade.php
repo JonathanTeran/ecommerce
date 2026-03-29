@@ -324,7 +324,9 @@
     {{-- Chart.js --}}
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    function initCeoDashboardCharts() {
+        // Destroy existing chart instances to prevent duplicates on SPA navigation
+        Chart.helpers.each(Chart.instances, function(instance) { instance.destroy(); });
         const isDark = document.documentElement.classList.contains('dark');
         const gridColor = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)';
         const textColor = isDark ? '#9ca3af' : '#6b7280';
@@ -477,6 +479,20 @@
             }
         });
         @endif
+    }
+
+    // Initialize on first load
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initCeoDashboardCharts);
+    } else {
+        initCeoDashboardCharts();
+    }
+
+    // Re-initialize on Livewire SPA navigation
+    document.addEventListener('livewire:navigated', function() {
+        if (document.getElementById('ceoRevenueChart')) {
+            setTimeout(initCeoDashboardCharts, 100);
+        }
     });
     </script>
 </x-filament-panels::page>
