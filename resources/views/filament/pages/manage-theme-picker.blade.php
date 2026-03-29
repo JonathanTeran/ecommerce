@@ -69,12 +69,43 @@
                     @if($template['preview_image'] ?? null)
                         <img src="{{ $template['preview_image'] }}" alt="{{ $template['name'] }}" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500">
                     @else
-                        <div class="w-full h-full" style="background: linear-gradient(135deg, {{ $gradientColors[0] ?? '#6366f1' }} 0%, {{ $gradientColors[1] ?? '#818cf8' }} 100%);">
-                            <div class="absolute inset-0 flex items-center justify-center">
-                                <div class="text-center" style="color: rgba(255,255,255,0.8);">
-                                    <svg class="w-12 h-12 mx-auto mb-2 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                                    <span class="text-sm font-medium opacity-60">{{ $template['name'] }}</span>
+                        @php
+                            $bg = $gradientColors[0] ?? '#6366f1';
+                            $surface = $gradientColors[1] ?? '#818cf8';
+                            $accent = $gradientColors[2] ?? $gradientColors[0] ?? '#6366f1';
+                            $text = $gradientColors[3] ?? '#ffffff';
+                        @endphp
+                        {{-- Mini storefront mockup using theme colors --}}
+                        <div class="w-full h-full relative overflow-hidden" style="background: {{ $bg }};">
+                            {{-- Fake navbar --}}
+                            <div class="flex items-center justify-between px-4 py-2" style="background: {{ $surface }};">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-4 h-4 rounded" style="background: {{ $accent }};"></div>
+                                    <div class="w-12 h-1.5 rounded-full" style="background: {{ $text }}; opacity: 0.6;"></div>
                                 </div>
+                                <div class="flex gap-3">
+                                    <div class="w-6 h-1.5 rounded-full" style="background: {{ $text }}; opacity: 0.3;"></div>
+                                    <div class="w-6 h-1.5 rounded-full" style="background: {{ $text }}; opacity: 0.3;"></div>
+                                    <div class="w-6 h-1.5 rounded-full" style="background: {{ $text }}; opacity: 0.3;"></div>
+                                </div>
+                            </div>
+                            {{-- Fake hero --}}
+                            <div class="px-4 pt-6 pb-4">
+                                <div class="w-24 h-2 rounded-full mb-2" style="background: {{ $text }}; opacity: 0.8;"></div>
+                                <div class="w-36 h-3 rounded-full mb-1" style="background: {{ $text }}; opacity: 0.5;"></div>
+                                <div class="w-16 h-5 rounded-md mt-3" style="background: {{ $accent }};"></div>
+                            </div>
+                            {{-- Fake product cards --}}
+                            <div class="px-4 grid grid-cols-4 gap-2">
+                                @for($i = 0; $i < 4; $i++)
+                                    <div class="rounded-md overflow-hidden" style="background: {{ $surface }};">
+                                        <div class="aspect-square" style="background: {{ $bg }}; opacity: 0.5;"></div>
+                                        <div class="p-1.5">
+                                            <div class="w-full h-1 rounded-full mb-1" style="background: {{ $text }}; opacity: 0.3;"></div>
+                                            <div class="w-8 h-1 rounded-full" style="background: {{ $accent }}; opacity: 0.7;"></div>
+                                        </div>
+                                    </div>
+                                @endfor
                             </div>
                         </div>
                     @endif
