@@ -64,10 +64,10 @@
                         ? 'border-primary-500 ring-2 ring-primary-500/20 shadow-lg shadow-primary-500/10'
                         : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600' }}"
             >
-                {{-- Preview Image / Gradient --}}
-                <div class="relative h-44 shrink-0 overflow-hidden">
+                {{-- Preview Image / Mockup --}}
+                <div class="relative overflow-hidden" style="height: 180px; flex-shrink: 0;">
                     @if($template['preview_image'] ?? null)
-                        <img src="{{ $template['preview_image'] }}" alt="{{ $template['name'] }}" class="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500">
+                        <img src="{{ $template['preview_image'] }}" alt="{{ $template['name'] }}" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top;" class="group-hover:scale-105 transition-transform duration-500">
                     @else
                         @php
                             $allSwatches = $template['swatches'] ?? [];
@@ -192,16 +192,16 @@
         @endforeach
     </div>
 
-    {{-- Fullscreen Preview Modal --}}
+    {{-- Fullscreen Preview Modal (teleported to body to escape Filament stacking context) --}}
     @if($showPreviewModal && $previewUrl)
+        <template x-teleport="body">
         <div
-            class="fixed inset-0 z-[999] flex flex-col"
-            style="background: rgba(0,0,0,0.9);"
             x-data
             x-on:keydown.escape.window="$wire.closePreview()"
+            style="position: fixed; inset: 0; z-index: 999999; display: flex; flex-direction: column; background: rgba(0,0,0,0.95);"
         >
             {{-- Toolbar --}}
-            <div class="flex items-center justify-between px-6 py-3" style="background: #111827;">
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; background: #111827;">
                 <div class="flex items-center gap-4">
                     <span class="text-white font-semibold text-sm">Vista Previa de Plantilla</span>
                 </div>
@@ -232,16 +232,15 @@
             </div>
 
             {{-- Iframe Container --}}
-            <div class="flex-1 flex items-start justify-center overflow-hidden p-4">
-                <div class="h-full transition-all duration-500 ease-in-out {{ $previewDevice === 'mobile' ? 'w-[375px]' : 'w-full' }}"
-                    style="{{ $previewDevice === 'mobile' ? 'border-radius: 32px; border: 8px solid #374151; box-shadow: 0 0 40px rgba(0,0,0,0.5);' : 'border-radius: 12px; overflow: hidden;' }}">
+            <div style="flex: 1; display: flex; align-items: flex-start; justify-content: center; overflow: hidden; padding: 16px;">
+                <div style="height: 100%; width: {{ $previewDevice === 'mobile' ? '375px' : '100%' }}; transition: width 0.5s ease; {{ $previewDevice === 'mobile' ? 'border-radius: 32px; border: 8px solid #374151; box-shadow: 0 0 40px rgba(0,0,0,0.5);' : 'border-radius: 12px; overflow: hidden;' }}">
                     <iframe
                         src="{{ $previewUrl }}"
-                        class="w-full h-full bg-white"
-                        style="border: none; {{ $previewDevice === 'mobile' ? 'border-radius: 24px;' : 'border-radius: 12px;' }}"
+                        style="width: 100%; height: 100%; border: none; background: white; {{ $previewDevice === 'mobile' ? 'border-radius: 24px;' : 'border-radius: 12px;' }}"
                     ></iframe>
                 </div>
             </div>
         </div>
+        </template>
     @endif
 </x-filament-panels::page>
