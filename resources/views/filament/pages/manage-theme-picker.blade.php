@@ -65,7 +65,7 @@
                         : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600' }}"
             >
                 {{-- Preview Image / Gradient --}}
-                <div class="relative h-48 overflow-hidden">
+                <div class="relative h-44 overflow-hidden">
                     @if($template['preview_image'] ?? null)
                         <img src="{{ $template['preview_image'] }}" alt="{{ $template['name'] }}" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500">
                     @else
