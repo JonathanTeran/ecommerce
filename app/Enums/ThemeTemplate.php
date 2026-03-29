@@ -98,4 +98,9 @@ enum ThemeTemplate: string
             ],
         };
     }
+
+    public function colorSwatches(): array
+    {
+        return array_values($this->cssVariables());
+    }
 }

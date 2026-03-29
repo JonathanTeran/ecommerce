@@ -43,6 +43,11 @@ class StoreTemplate extends Model
         return $query->where('is_active', true);
     }
 
+    public function getColorSwatchesAttribute(): array
+    {
+        return array_values($this->color_scheme ?? []);
+    }
+
     public function getCategoryLabelAttribute(): string
     {
         return match ($this->category) {

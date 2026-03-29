@@ -198,6 +198,13 @@
         <noscript><iframe src="https://www.googletagmanager.com/ns.html?id={{ $seoConfig['google_tag_manager_id'] }}" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     @endif
 
+    @if($isPreview ?? false)
+        <div style="position: fixed; top: 0; left: 0; right: 0; z-index: 9999; background: linear-gradient(90deg, #f59e0b, #d97706); color: #000; text-align: center; padding: 10px 16px; font-size: 13px; font-weight: 600; letter-spacing: 0.5px; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
+            MODO VISTA PREVIA — Los cambios no han sido guardados
+        </div>
+        <div style="height: 42px;"></div>
+    @endif
+
     <x-navbar />
 
     <main class="min-h-screen">

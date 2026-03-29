@@ -23,14 +23,8 @@ class ManageGeneralSettings extends Page
     public function mount(): void
     {
         $settings = GeneralSetting::forCurrentTenantOrCreate();
-        $data = $settings->toArray();
 
-        // Load tenant-level theme fields
-        $tenant = app()->bound('current_tenant') ? app('current_tenant') : null;
-        $data['theme_template'] = $tenant?->theme_template?->value ?? 'default';
-        $data['store_template_id'] = $tenant?->store_template_id;
-
-        $this->form->fill($data);
+        $this->form->fill($settings->toArray());
     }
 
     public function form(Form $form): Form
@@ -79,27 +73,16 @@ class ManageGeneralSettings extends Page
                     ])->columns(3),
 
                 Forms\Components\Section::make('Plantilla de la Tienda')
-                    ->description('Selecciona el estilo visual de tu tienda. Cada plantilla tiene un layout diferente optimizado para tu tipo de negocio.')
                     ->schema([
-                        Forms\Components\Radio::make('theme_template')
-                            ->label('Estilo Base')
-                            ->options(collect(\App\Enums\ThemeTemplate::cases())->mapWithKeys(fn ($t) => [$t->value => $t->label()]))
-                            ->descriptions(collect(\App\Enums\ThemeTemplate::cases())->mapWithKeys(fn ($t) => [$t->value => $t->description()]))
-                            ->default('default')
-                            ->columns(2)
-                            ->live(),
-
-                        Forms\Components\Select::make('store_template_id')
-                            ->label('Plantilla Predefinida')
-                            ->helperText('Las plantillas predefinidas son administradas por el equipo de la plataforma. Sobreescriben el estilo base si se seleccionan.')
-                            ->options(fn () => \App\Models\StoreTemplate::active()
-                                ->orderBy('sort_order')
-                                ->get()
-                                ->mapWithKeys(fn ($t) => [$t->id => $t->name.' — '.$t->category_label])
-                            )
-                            ->placeholder('Ninguna (usar estilo base)')
-                            ->searchable()
-                            ->nullable(),
+                        Forms\Components\Placeholder::make('template_link')
+                            ->label('')
+                            ->content(new \Illuminate\Support\HtmlString(
+                                '<a href="'.ManageThemePicker::getUrl().'" class="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 font-semibold">'
+                                .'<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/></svg>'
+                                .'Ir al Selector Visual de Plantillas &rarr;'
+                                .'</a>'
+                                .'<p class="text-sm text-gray-500 mt-1">Elige entre multiples plantillas con previsualizacion en vivo antes de aplicar.</p>'
+                            )),
                     ]),
 
                 Forms\Components\Section::make('Configuración Fiscal y Moneda')
@@ -240,22 +223,7 @@ class ManageGeneralSettings extends Page
         $state = $this->form->getState();
 
         $settings = GeneralSetting::forCurrentTenantOrCreate();
-
-        // Extract tenant-level fields
-        $themeTemplate = $state['theme_template'] ?? null;
-        $storeTemplateId = $state['store_template_id'] ?? null;
-        unset($state['theme_template'], $state['store_template_id']);
-
         $settings->update($state);
-
-        // Sync theme fields to Tenant model
-        $tenant = app()->bound('current_tenant') ? app('current_tenant') : null;
-        if ($tenant) {
-            $tenant->update([
-                'theme_template' => $themeTemplate ?? 'default',
-                'store_template_id' => $storeTemplateId,
-            ]);
-        }
 
         Notification::make()
             ->title('Ajustes guardados exitosamente')

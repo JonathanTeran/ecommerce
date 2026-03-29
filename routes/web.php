@@ -7,6 +7,7 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 // Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['localeSessionRedirect', 'localizationRedirect', 'localeViewPath']], function () {
 Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/preview-template', \App\Http\Controllers\StorefrontPreviewController::class)->name('storefront.preview');
 
 // Tenant Self-Registration
 Route::prefix('register-store')->name('tenant-registration.')->group(function () {
