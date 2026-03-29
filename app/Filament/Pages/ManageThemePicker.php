@@ -56,6 +56,18 @@ class ManageThemePicker extends Page
 
     public function openPreview(): void
     {
+        // For StoreTemplates with demo HTML, show the real template
+        if ($this->selectedStoreTemplateId) {
+            $template = StoreTemplate::find($this->selectedStoreTemplateId);
+            if ($template?->demo_url) {
+                $this->previewUrl = $template->demo_url;
+                $this->showPreviewModal = true;
+
+                return;
+            }
+        }
+
+        // For ThemeTemplate base styles, use signed storefront preview
         $params = [];
 
         if ($this->selectedThemeTemplate) {

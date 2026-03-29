@@ -48,6 +48,17 @@ class StoreTemplate extends Model
         return array_values($this->color_scheme ?? []);
     }
 
+    public function getDemoUrlAttribute(): ?string
+    {
+        $demoPages = [
+            'anton' => '/templates/anton-demo/Home_01.html',
+            'jovenca' => '/templates/jovenca-demo/home.html',
+            'radios' => '/templates/radios-demo/index.html',
+        ];
+
+        return $demoPages[$this->slug] ?? null;
+    }
+
     public function getCategoryLabelAttribute(): string
     {
         return match ($this->category) {
