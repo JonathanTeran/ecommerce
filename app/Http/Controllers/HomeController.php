@@ -28,11 +28,13 @@ class HomeController extends Controller
         $seoConfig = $settings?->getSeoConfig() ?? [];
 
         $seo = [
-            'title' => !empty($seoConfig['home_meta_title']) ? $seoConfig['home_meta_title'] : ($settings?->site_name ?? config('app.name')),
+            'title' => ! empty($seoConfig['home_meta_title']) ? $seoConfig['home_meta_title'] : ($settings?->site_name ?? config('app.name')),
             'metaDescription' => $seoConfig['home_meta_description'] ?? '',
         ];
 
-        return view('welcome', compact('sections', 'sectionData', 'sectionFonts', 'seo'));
+        $tenant = app()->bound('current_tenant') ? app('current_tenant') : null;
+
+        return view('welcome', compact('sections', 'sectionData', 'sectionFonts', 'seo', 'tenant'));
     }
 
     /** @return array<int, array<string, mixed>> */
@@ -107,7 +109,7 @@ class HomeController extends Controller
                     'formatted_price' => $product->formatted_price,
                     'price' => $product->price,
                     'compare_price' => $product->compare_price,
-                    'formatted_compare_price' => $product->compare_price ? '$' . number_format($product->compare_price, 2) : null,
+                    'formatted_compare_price' => $product->compare_price ? '$'.number_format($product->compare_price, 2) : null,
                     'discount_percent' => $discount,
                     'is_new' => (bool) $product->is_new,
                     'is_featured' => (bool) $product->is_featured,

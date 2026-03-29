@@ -10,9 +10,13 @@
         @endpush
     @endif
 
+    @php
+        $themeTemplate = ($tenant ?? null)?->theme_template ?? null;
+    @endphp
+
     @forelse ($sections as $section)
         <x-dynamic-component
-            :component="$section->type->bladeComponent()"
+            :component="$section->type->bladeComponent($themeTemplate)"
             :section="$section"
             :data="$sectionData[$section->id] ?? []"
         />

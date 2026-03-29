@@ -33,9 +33,20 @@ enum SectionType: string
         };
     }
 
-    public function bladeComponent(): string
+    public function bladeComponent(?ThemeTemplate $template = null): string
     {
-        return 'sections.' . str_replace('_', '-', $this->value);
+        $base = str_replace('_', '-', $this->value);
+
+        // If a theme template is specified and it's not default, check for themed variant
+        if ($template && $template !== ThemeTemplate::Default) {
+            $themed = $template->sectionPrefix().'.'.$base;
+
+            if (view()->exists('components.'.$themed)) {
+                return $themed;
+            }
+        }
+
+        return 'sections.'.$base;
     }
 
     /** @return array<string, mixed> */

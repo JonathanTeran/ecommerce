@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\Module;
+use App\Enums\ThemeTemplate;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -32,6 +33,7 @@ class Tenant extends Model
         'logo',
         'favicon',
         'theme_color',
+        'theme_template',
         'country',
         'currency',
         'language',
@@ -50,6 +52,7 @@ class Tenant extends Model
         'is_demo' => 'boolean',
         'is_default' => 'boolean',
         'settings' => 'array',
+        'theme_template' => ThemeTemplate::class,
         'trial_ends_at' => 'datetime',
         'deactivated_at' => 'datetime',
     ];
