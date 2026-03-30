@@ -192,9 +192,30 @@
     @php
         $currentTenant = app()->bound('current_tenant') ? app('current_tenant') : null;
         $themeVars = $currentTenant?->theme_template?->cssVariables() ?? [];
+        $storeTemplate = $currentTenant?->storeTemplate;
+        $templateColors = $storeTemplate?->color_scheme ?? [];
+        $templateFonts = $storeTemplate?->fonts ?? [];
     @endphp
-    @if(!empty($themeVars))
-        <style>:root { @foreach($themeVars as $varName => $varValue) {{ $varName }}: {{ $varValue }}; @endforeach }</style>
+    <style>
+        :root {
+            @foreach($themeVars as $varName => $varValue)
+                {{ $varName }}: {{ $varValue }};
+            @endforeach
+            @if(!empty($templateColors))
+                --template-primary: {{ $templateColors['primary'] ?? '#4f46e5' }};
+                --template-secondary: {{ $templateColors['secondary'] ?? '#6366f1' }};
+                --template-accent: {{ $templateColors['accent'] ?? '#4f46e5' }};
+                --template-bg: {{ $templateColors['background'] ?? '#ffffff' }};
+                --template-text: {{ $templateColors['text'] ?? '#333333' }};
+            @endif
+        }
+        @if(!empty($templateFonts))
+            body { font-family: '{{ $templateFonts['body'] ?? 'Inter' }}', system-ui, sans-serif !important; }
+            h1, h2, h3, h4, h5, h6, .font-heading { font-family: '{{ $templateFonts['heading'] ?? $templateFonts['body'] ?? 'Inter' }}', system-ui, sans-serif !important; }
+        @endif
+    </style>
+    @if($storeTemplate?->css_file)
+        <link rel="stylesheet" href="/{{ $storeTemplate->css_file }}">
     @endif
 
     @stack('head')

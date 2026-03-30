@@ -6,7 +6,6 @@ use App\Enums\SectionType;
 use App\Enums\ThemeTemplate;
 use App\Models\Brand;
 use App\Models\Category;
-use App\Models\GeneralSetting;
 use App\Models\HomepageSection;
 use App\Models\Product;
 use App\Models\StoreTemplate;
@@ -26,20 +25,20 @@ class StorefrontPreviewController extends Controller
             abort(404);
         }
 
-        // Check if previewing a StoreTemplate with its own layout
-        if ($request->filled('store_template_id')) {
-            $storeTemplate = StoreTemplate::find($request->query('store_template_id'));
-            if ($storeTemplate && view()->exists('templates.'.$storeTemplate->slug)) {
-                return $this->renderStoreTemplate($storeTemplate, $tenant);
-            }
-        }
-
         // Override tenant theme in memory only (no DB writes)
         if ($request->filled('theme_template')) {
             $template = ThemeTemplate::tryFrom($request->query('theme_template'));
             if ($template) {
                 $tenant->theme_template = $template;
                 $tenant->store_template_id = null;
+            }
+        }
+
+        if ($request->filled('store_template_id')) {
+            $storeTemplate = StoreTemplate::find($request->query('store_template_id'));
+            if ($storeTemplate) {
+                $tenant->store_template_id = $storeTemplate->id;
+                $tenant->setRelation('storeTemplate', $storeTemplate);
             }
         }
 
@@ -62,44 +61,6 @@ class StorefrontPreviewController extends Controller
         $isPreview = true;
 
         return view('welcome', compact('sections', 'sectionData', 'sectionFonts', 'seo', 'tenant', 'isPreview'));
-    }
-
-    private function renderStoreTemplate(StoreTemplate $storeTemplate, $tenant)
-    {
-        $settings = GeneralSetting::forCurrentTenant();
-
-        $data = [
-            'template' => $storeTemplate,
-            'tenant' => $tenant,
-            'settings' => $settings,
-            'siteName' => $settings?->site_name ?? $tenant->name ?? config('app.name'),
-            'categories' => Category::whereNull('parent_id')
-                ->where('is_active', true)
-                ->withCount('products')
-                ->orderBy('name')
-                ->take(8)
-                ->get(),
-            'featuredProducts' => Product::where('is_active', true)
-                ->where('is_featured', true)
-                ->with(['media', 'brand', 'category', 'reviews'])
-                ->take(8)
-                ->get(),
-            'newProducts' => Product::where('is_active', true)
-                ->where('is_new', true)
-                ->with(['media', 'brand', 'category', 'reviews'])
-                ->latest()
-                ->take(8)
-                ->get(),
-            'allProducts' => Product::where('is_active', true)
-                ->with(['media', 'brand', 'category', 'reviews'])
-                ->latest()
-                ->take(12)
-                ->get(),
-            'brands' => Brand::take(10)->get(),
-            'isPreview' => true,
-        ];
-
-        return view('templates.'.$storeTemplate->slug, $data);
     }
 
     private function loadSectionData($sections): array
