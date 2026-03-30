@@ -76,7 +76,7 @@
                             @endif
                         </div>
                     </div>
-                    <a href="{{ route('products.show', $product) }}" class="btn-add">Ver Producto</a>
+                    <button class="btn-add" x-data x-on:click.prevent="$store.cart.add({{ $product->id }})">Agregar al Carrito</button>
                 </div>
             @endforeach
         </div>

@@ -121,7 +121,7 @@
                             @endif
                         </div>
                         <div class="stock">En Stock</div>
-                        <a href="{{ route('products.show', $product) }}" class="btn-cart">Ver Producto</a>
+                        <button class="btn-cart" x-data x-on:click.prevent="$store.cart.add({{ $product->id }})">Agregar al Carrito</button>
                     </div>
                 @endforeach
             </div>

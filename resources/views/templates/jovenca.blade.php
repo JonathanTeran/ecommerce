@@ -98,7 +98,7 @@
                                 <span class="old-price">${{ number_format($product->compare_price, 2) }}</span>
                             @endif
                         </div>
-                        <a href="{{ route('products.show', $product) }}" class="btn-cart">Ver Producto</a>
+                        <button class="btn-cart" x-data x-on:click.prevent="$store.cart.add({{ $product->id }})">Agregar al Carrito</button>
                     </div>
                 </div>
             @endforeach
