@@ -102,6 +102,9 @@ class ManageThemePicker extends Page
             'store_template_id' => $this->selectedStoreTemplateId,
         ]);
 
+        // Auto-configure settings based on selected template
+        $this->autoConfigureFromTemplate($tenant);
+
         $this->showPreviewModal = false;
 
         Notification::make()
@@ -109,6 +112,47 @@ class ManageThemePicker extends Page
             ->body('Los cambios ya son visibles en tu tienda.')
             ->success()
             ->send();
+    }
+
+    private function autoConfigureFromTemplate($tenant): void
+    {
+        $settings = \App\Models\GeneralSetting::forCurrentTenantOrCreate();
+
+        if ($this->selectedStoreTemplateId) {
+            $template = StoreTemplate::find($this->selectedStoreTemplateId);
+            if (! $template) {
+                return;
+            }
+
+            $fonts = $template->fonts ?? [];
+            $colors = $template->color_scheme ?? [];
+
+            $settings->update(array_filter([
+                'typography_config' => [
+                    'heading_font' => $fonts['heading'] ?? null,
+                    'body_font' => $fonts['body'] ?? null,
+                    'font_size_scale' => 'normal',
+                ],
+                'navbar_config' => array_merge($settings->navbar_config ?? [], [
+                    'style' => in_array($colors['background'] ?? '', ['#ffffff', '#fff', '#f8f5f0']) ? 'solid_white' : 'solid_dark',
+                ]),
+            ]));
+        } elseif ($this->selectedThemeTemplate) {
+            $theme = \App\Enums\ThemeTemplate::tryFrom($this->selectedThemeTemplate);
+            if (! $theme) {
+                return;
+            }
+
+            $settings->update([
+                'navbar_config' => array_merge($settings->navbar_config ?? [], [
+                    'style' => $theme->navbarStyle(),
+                ]),
+            ]);
+        }
+
+        // Regenerate homepage sections with updated styling
+        \App\Models\HomepageSection::where('tenant_id', $tenant->id)->delete();
+        app(\App\Services\DemoHomepageBuilder::class)->build($tenant);
     }
 
     public function getBaseThemesProperty(): array

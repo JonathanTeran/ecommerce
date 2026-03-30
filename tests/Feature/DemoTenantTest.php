@@ -52,7 +52,7 @@ it('creates a demo tenant with 7 homepage sections', function () {
     expect($sections)->toHaveCount(10);
 });
 
-it('does not create homepage sections for non-demo tenants', function () {
+it('creates homepage sections for all tenants including non-demo', function () {
     $plan = createDemoPlan();
 
     $tenant = app(TenantProvisioningService::class)->provision([
@@ -63,6 +63,7 @@ it('does not create homepage sections for non-demo tenants', function () {
         'admin_email' => 'admin@regular.com',
         'admin_password' => 'password123',
         'is_demo' => false,
+        'seed_demo_data' => false,
     ]);
 
     expect($tenant->is_demo)->toBeFalse();
@@ -71,7 +72,7 @@ it('does not create homepage sections for non-demo tenants', function () {
         ->where('tenant_id', $tenant->id)
         ->get();
 
-    expect($sections)->toHaveCount(0);
+    expect($sections)->toHaveCount(10);
 });
 
 it('creates all section types for demo tenant', function () {

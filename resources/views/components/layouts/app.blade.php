@@ -188,6 +188,15 @@
         };
     </script>
 
+    {{-- Theme CSS Variables --}}
+    @php
+        $currentTenant = app()->bound('current_tenant') ? app('current_tenant') : null;
+        $themeVars = $currentTenant?->theme_template?->cssVariables() ?? [];
+    @endphp
+    @if(!empty($themeVars))
+        <style>:root { @foreach($themeVars as $varName => $varValue) {{ $varName }}: {{ $varValue }}; @endforeach }</style>
+    @endif
+
     @stack('head')
 </head>
 
