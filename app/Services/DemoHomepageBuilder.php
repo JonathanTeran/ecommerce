@@ -8,11 +8,21 @@ use App\Models\Tenant;
 
 class DemoHomepageBuilder
 {
-    public function build(Tenant $tenant): void
+    /**
+     * Build homepage sections for a tenant, optionally styled with a color scheme.
+     *
+     * @param  array{primary?: string, secondary?: string, background?: string, text?: string, accent?: string}|null  $colorScheme
+     */
+    public function build(Tenant $tenant, ?array $colorScheme = null): void
     {
         $sections = $this->sections();
 
         foreach ($sections as $index => $section) {
+            // Override section styles if a color scheme is provided
+            if ($colorScheme && isset($section['config']['style'])) {
+                $section['config']['style'] = $this->applyColorScheme($section['config']['style'], $colorScheme);
+            }
+
             $model = new HomepageSection([
                 'type' => $section['type'],
                 'name' => $section['name'],
@@ -23,6 +33,37 @@ class DemoHomepageBuilder
             $model->tenant_id = $tenant->id;
             $model->save();
         }
+    }
+
+    /**
+     * @param  array<string, mixed>  $style
+     * @param  array{primary?: string, secondary?: string, background?: string, text?: string, accent?: string}  $colors
+     * @return array<string, mixed>
+     */
+    private function applyColorScheme(array $style, array $colors): array
+    {
+        $bg = $colors['background'] ?? '#ffffff';
+        $text = $colors['text'] ?? '#333333';
+        $primary = $colors['primary'] ?? '#4f46e5';
+        $secondary = $colors['secondary'] ?? $primary;
+        $isLight = $this->isLightColor($bg);
+
+        $style['bg_type'] = 'gradient';
+        $style['bg_gradient_from'] = $isLight ? $bg : $primary;
+        $style['bg_gradient_to'] = $isLight ? '#f9fafb' : $secondary;
+        $style['text_color'] = $isLight ? $text : '#ffffff';
+
+        return $style;
+    }
+
+    private function isLightColor(string $hex): bool
+    {
+        $hex = ltrim($hex, '#');
+        $r = hexdec(substr($hex, 0, 2));
+        $g = hexdec(substr($hex, 2, 2));
+        $b = hexdec(substr($hex, 4, 2));
+
+        return ($r * 299 + $g * 587 + $b * 114) / 1000 > 128;
     }
 
     /** @return array<int, array{type: SectionType, name: string, config: array<string, mixed>}> */

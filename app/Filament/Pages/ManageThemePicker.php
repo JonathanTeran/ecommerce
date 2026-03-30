@@ -150,9 +150,16 @@ class ManageThemePicker extends Page
             ]);
         }
 
-        // Regenerate homepage sections with updated styling
+        // Regenerate homepage sections with template's color scheme
         \App\Models\HomepageSection::where('tenant_id', $tenant->id)->delete();
-        app(\App\Services\DemoHomepageBuilder::class)->build($tenant);
+
+        $colorScheme = null;
+        if ($this->selectedStoreTemplateId) {
+            $tpl = StoreTemplate::find($this->selectedStoreTemplateId);
+            $colorScheme = $tpl?->color_scheme;
+        }
+
+        app(\App\Services\DemoHomepageBuilder::class)->build($tenant, $colorScheme);
     }
 
     public function getBaseThemesProperty(): array
