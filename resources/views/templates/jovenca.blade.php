@@ -1,12 +1,6 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ $siteName }} — Joyeria & Accesorios</title>
+<x-layouts.app :title="$siteName . ' — Joyeria & Accesorios'">
+@push('head')
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/templates/jovenca-demo/css/bootstrap.css">
-    <link rel="stylesheet" href="/templates/jovenca-demo/style.css">
     <style>
         body { font-family: 'DM Sans', sans-serif; color: #333; background: #fff; }
         h1, h2, h3, h4 { font-family: 'Playfair Display', serif; }
@@ -53,12 +47,7 @@
         .jv-footer a { color: #777; text-decoration: none; font-size: 14px; }
         .jv-footer a:hover { color: #c8a165; }
     </style>
-</head>
-<body>
-    @if($isPreview ?? false)
-        <div class="preview-banner">MODO VISTA PREVIA — Los cambios no han sido guardados</div>
-        <div class="preview-spacer"></div>
-    @endif
+@endpush
 
     {{-- Top Bar --}}
     <div class="jv-topbar">
@@ -192,5 +181,4 @@
             </div>
         </div>
     </footer>
-</body>
-</html>
+</x-layouts.app>

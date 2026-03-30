@@ -1,12 +1,6 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ $siteName }} — Electronica & Tech</title>
+<x-layouts.app :title="$siteName . ' — Electronica & Tech'">
+@push('head')
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/templates/radios-demo/assets/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/templates/radios-demo/assets/css/main.css">
     <style>
         body { font-family: 'Rubik', sans-serif; background: #fff; }
         .preview-banner { position: fixed; top: 0; left: 0; right: 0; z-index: 9999; background: linear-gradient(90deg, #f59e0b, #d97706); color: #000; text-align: center; padding: 10px; font-size: 13px; font-weight: 600; }
@@ -56,12 +50,7 @@
         .rd-feature h4 { font-size: 14px; font-weight: 700; color: #333; margin-bottom: 4px; }
         .rd-feature p { font-size: 12px; color: #999; margin: 0; }
     </style>
-</head>
-<body>
-    @if($isPreview ?? false)
-        <div class="preview-banner">MODO VISTA PREVIA — Los cambios no han sido guardados</div>
-        <div class="preview-spacer"></div>
-    @endif
+@endpush
 
     {{-- Top Bar --}}
     <div class="rd-topbar">
@@ -238,5 +227,4 @@
             </div>
         </div>
     </footer>
-</body>
-</html>
+</x-layouts.app>

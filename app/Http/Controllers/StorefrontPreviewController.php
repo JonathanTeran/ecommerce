@@ -39,6 +39,29 @@ class StorefrontPreviewController extends Controller
             if ($storeTemplate) {
                 $tenant->store_template_id = $storeTemplate->id;
                 $tenant->setRelation('storeTemplate', $storeTemplate);
+
+                // If template has a Blade view, render it directly
+                if (view()->exists('templates.'.$storeTemplate->slug)) {
+                    $settings = \App\Models\GeneralSetting::forCurrentTenant();
+
+                    return view('templates.'.$storeTemplate->slug, [
+                        'template' => $storeTemplate,
+                        'tenant' => $tenant,
+                        'settings' => $settings,
+                        'siteName' => $settings?->site_name ?? $tenant->name ?? config('app.name'),
+                        'categories' => Category::whereNull('parent_id')
+                            ->where('is_active', true)
+                            ->withCount('products')
+                            ->orderBy('name')
+                            ->take(8)
+                            ->get(),
+                        'featuredProducts' => Product::where('is_active', true)->where('is_featured', true)->with(['media', 'brand', 'category', 'reviews'])->take(8)->get(),
+                        'newProducts' => Product::where('is_active', true)->where('is_new', true)->with(['media', 'brand', 'category', 'reviews'])->latest()->take(8)->get(),
+                        'allProducts' => Product::where('is_active', true)->with(['media', 'brand', 'category', 'reviews'])->latest()->take(12)->get(),
+                        'brands' => Brand::take(10)->get(),
+                        'isPreview' => true,
+                    ]);
+                }
             }
         }
 

@@ -15,6 +15,14 @@ class HomeController extends Controller
     {
         $tenant = app()->bound('current_tenant') ? app('current_tenant') : null;
 
+        // If tenant has a StoreTemplate with a Blade view, render that layout
+        if ($tenant?->store_template_id) {
+            $storeTemplate = $tenant->storeTemplate;
+            if ($storeTemplate && view()->exists('templates.'.$storeTemplate->slug)) {
+                return $this->renderStoreTemplate($storeTemplate, $tenant);
+            }
+        }
+
         $sections = HomepageSection::active()->ordered()->get();
 
         $sectionData = $this->loadSectionData($sections);
@@ -45,6 +53,42 @@ class HomeController extends Controller
         ];
 
         return view('welcome', compact('sections', 'sectionData', 'sectionFonts', 'seo', 'tenant'));
+    }
+
+    private function renderStoreTemplate(\App\Models\StoreTemplate $storeTemplate, $tenant)
+    {
+        $settings = \App\Models\GeneralSetting::cached();
+
+        return view('templates.'.$storeTemplate->slug, [
+            'template' => $storeTemplate,
+            'tenant' => $tenant,
+            'settings' => $settings,
+            'siteName' => $settings?->site_name ?? $tenant->name ?? config('app.name'),
+            'categories' => Category::whereNull('parent_id')
+                ->where('is_active', true)
+                ->withCount('products')
+                ->orderBy('name')
+                ->take(8)
+                ->get(),
+            'featuredProducts' => Product::where('is_active', true)
+                ->where('is_featured', true)
+                ->with(['media', 'brand', 'category', 'reviews'])
+                ->take(8)
+                ->get(),
+            'newProducts' => Product::where('is_active', true)
+                ->where('is_new', true)
+                ->with(['media', 'brand', 'category', 'reviews'])
+                ->latest()
+                ->take(8)
+                ->get(),
+            'allProducts' => Product::where('is_active', true)
+                ->with(['media', 'brand', 'category', 'reviews'])
+                ->latest()
+                ->take(12)
+                ->get(),
+            'brands' => Brand::take(10)->get(),
+            'isPreview' => false,
+        ]);
     }
 
     /** @return array<int, array<string, mixed>> */

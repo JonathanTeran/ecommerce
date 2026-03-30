@@ -1,12 +1,6 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ $siteName }} — Moda & Estilo</title>
+<x-layouts.app :title="$siteName . ' — Moda & Estilo'">
+@push('head')
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/templates/anton-demo/assets/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/templates/anton-demo/assets/css/style.css">
     <style>
         body { font-family: 'Poppins', sans-serif; }
         .preview-banner { position: fixed; top: 0; left: 0; right: 0; z-index: 9999; background: linear-gradient(90deg, #f59e0b, #d97706); color: #000; text-align: center; padding: 10px; font-size: 13px; font-weight: 600; }
@@ -48,12 +42,7 @@
         .navbar-real .nav-links a { color: #333; text-decoration: none; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; font-weight: 500; }
         .navbar-real .nav-links a:hover { color: #000; }
     </style>
-</head>
-<body>
-    @if($isPreview ?? false)
-        <div class="preview-banner">MODO VISTA PREVIA — Los cambios no han sido guardados</div>
-        <div class="preview-spacer"></div>
-    @endif
+@endpush
 
     {{-- Navbar --}}
     <nav class="navbar-real">
@@ -189,5 +178,4 @@
             </div>
         </div>
     </footer>
-</body>
-</html>
+</x-layouts.app>
